@@ -7,14 +7,14 @@ import emptyStar from '../icons/empty-star.png';
 import './star.css';
 
 /**
- * @description Display rating stars either of own ratings or average ratings 
+ * @description Display rating stars of own ratings
  */
 const Star = ({ value, onClick }) => {
 	let stars;
 	let src;
 
 	/**
-	 * @description stores the star rating of each book in array by getting the value either from Local Storage or book object 
+	 * @description stores the star rating of each book in array by getting the value either from Local Storage or from the rate value  
 	 * 
 	 * @returns array with the types of stars to display
 	 */
@@ -51,7 +51,7 @@ const Star = ({ value, onClick }) => {
 							src={src}
 							alt="rating"
 							width="20"
-							onClick={onClick && (() => onClick(index + 1))} // enable click handler only if showing own ratings
+							onClick={onClick && (() => onClick(index + 1))} // enable click handler only if adding own ratings
 						/>
 					);
 				}))

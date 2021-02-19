@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import Book from './../components/Book';
 import './bookList.css';
 
+/**
+ * @description Display list of books user has read 
+ */
 class BookList extends Component {
 	render() {
 		console.log(this.props.filteredBooks);

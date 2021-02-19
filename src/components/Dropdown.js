@@ -2,6 +2,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './dropdown.css';
 import { trancateTitle } from './../utils/helper';
 import { searchBook } from '../utils/api';
+import { PropTypes } from 'prop-types';
+
+/**
+ * @description Responsible for displaying the list of books 
+ */
 
 export default function Dropdown({ query, setTitle }) {
 	const [
@@ -13,7 +18,7 @@ export default function Dropdown({ query, setTitle }) {
 		setSelected
 	] = useState({});
 
-	/* Whenever query changes */
+	/* updates the list of books whenever query changes */
 	useEffect(
 		() => {
 			const search = () => searchBook(query).then((books) => setBooks(books));
@@ -24,12 +29,17 @@ export default function Dropdown({ query, setTitle }) {
 		]
 	);
 
-	/* Callback function when book item is clicked */
-	const handleBook = useCallback((id, books) => {
-		setSelected(Object.values(books).filter((book) => book.id === id));
-	}, []);
+	/* Callback function to set the selected book that was clicked on from the list of books */
+	const handleBook = useCallback(
+		(id, books) => {
+			setSelected(Object.values(books).filter((book) => book.id === id));
+		},
+		[
+			selected
+		]
+	);
 
-	/* when selected state changes */
+	/* set the book title state when the selected book is updated */
 	useEffect(
 		() => {
 			if (selected && selected.length > 0) {
@@ -70,3 +80,8 @@ export default function Dropdown({ query, setTitle }) {
 		</React.Fragment>
 	);
 }
+
+Dropdown.propTypes = {
+	query: PropTypes.string.isRequired,
+	setTitle: PropTypes.func
+};

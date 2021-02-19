@@ -7,7 +7,6 @@ import NoMatch from './NoMatch';
 
 /**
  * @description Handle all the routes
- * pass global state to Home and Search components
  */
 
 const Router = () => {

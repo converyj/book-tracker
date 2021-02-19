@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import Star from './Star';
 import AddRating from './AddRating';
 
+/**
+ * @description Save input field state and add book 
+ */
 class SearchForm extends Component {
 	state = {
 		book: {},
@@ -18,12 +21,14 @@ class SearchForm extends Component {
 		isLibraryBook: false,
 		showDropdown: false
 	};
+
 	setDate = (date) => {
 		this.setState({
 			date
 		});
 	};
 
+	/* show the dropdown to display list of books when title changes  */
 	componentDidUpdate(_, prevState) {
 		if (
 			this.state.title !== prevState.title &&
@@ -38,22 +43,25 @@ class SearchForm extends Component {
 		this.setState({ isLibraryBook: !this.state.isLibraryBook });
 	};
 
+	/* set the title and book when user has clicked on a book from the dropdown */
 	handleTitle = (book) => {
 		const { title } = book.volumeInfo;
 		this.setState({ title, book, showDropdown: false });
 	};
 
+	/* add book */
 	handleAdd = () => {
 		const { book, comment, isLibraryBook, rate } = this.state;
 		this.props.addBook({ ...book, comment, isLibraryBook, rate });
 	};
 
+	/* set the rate of book when user clicks on star */
 	setRate = (value) => {
 		this.setState({ rate: value });
 	};
 
 	render() {
-		const { title, comment, isLibraryBook, showDropdown } = this.state;
+		const { title, comment, isLibraryBook, rate, showDropdown } = this.state;
 		return (
 			<div className="search-grid">
 				<form action="">
@@ -68,9 +76,7 @@ class SearchForm extends Component {
 							/>
 						</div>
 
-						{showDropdown && (
-							<Dropdown query={this.state.title} setTitle={this.handleTitle} />
-						)}
+						{showDropdown && <Dropdown query={title} setTitle={this.handleTitle} />}
 					</div>
 
 					{/* <DatePickers handleDateChange={(date) => this.setDate(date)} /> */}
@@ -94,7 +100,7 @@ class SearchForm extends Component {
 						/>
 					</div>
 					<div className="form-group">
-						<AddRating setRate={this.setRate} rate={this.state.rate} />
+						<AddRating setRate={this.setRate} rate={rate} />
 					</div>
 				</form>
 				<Link to="/" class="btn btn--form" type="button" onClick={this.handleAdd}>

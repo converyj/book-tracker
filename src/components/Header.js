@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { filterByValue } from '../actions/books';
 import './header.css';
+import { PropTypes } from 'prop-types';
 
+/**
+ * @description Display the filtering options 
+ */
 export class Header extends Component {
 	state = {
 		query: '',
@@ -28,5 +30,10 @@ export class Header extends Component {
 		);
 	}
 }
+
+Header.propTypes = {
+	filterBooks: PropTypes.func.isRequired,
+	handleSortedList: PropTypes.func.isRequired
+};
 
 export default Header;

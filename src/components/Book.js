@@ -5,9 +5,9 @@ import AddRating from './AddRating';
 import './book.css';
 
 /**
- * @description Displays a book with an option to move book and display ratings (both own and average) of each book 
+ * @description Displays a book and the user's own rating 
  */
-const Book = ({ book, moveBook }) => {
+const Book = ({ book }) => {
 	return (
 		<li>
 			<div className="book">
@@ -34,6 +34,10 @@ const Book = ({ book, moveBook }) => {
 			</div>
 		</li>
 	);
+};
+
+Book.propTypes = {
+	book: PropTypes.object.isRequired
 };
 
 export default Book;

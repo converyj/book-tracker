@@ -17,11 +17,13 @@ class Home extends Component {
 	// 	saveBooksLS(this.props.books);
 	// }
 
+	/* handle the filtering of books */
 	filterBooks = (e) => {
 		const input = e.target.value;
 		this.props.filterByValue(input);
 	};
 
+	/* handle the sorting of books based on author or date */
 	handleSortedList = (e) => {
 		let sortBy = e.target.value;
 		if (sortBy === 'By Author') {
