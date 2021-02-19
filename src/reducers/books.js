@@ -1,5 +1,5 @@
 import { RECIEVE_BOOKS, SORT_BY_AUTHOR } from '../actions/books';
-import { FILTER_BY_VALUE, SORT_BY_DATE } from './../actions/books';
+import { FILTER_BY_VALUE, SORT_BY_DATE, ADD_BOOK } from './../actions/books';
 
 export default function books(state = {}, action) {
 	switch (action.type) {
@@ -9,6 +9,24 @@ export default function books(state = {}, action) {
 				...state,
 				books,
 				filteredBooks: books
+			};
+		case ADD_BOOK:
+			// let allBooksState = Object.assign({}, state.books, { ...action.book });
+			// const allBooks = { ...state.books, ...action.book };
+
+			// // allBooksState.books = allBooks;
+			// // allBooksState.filteredBooks = { ...state.filteredBooks, ...allBooks };
+			// // console.log(allBooksState);
+			return {
+				...state,
+				books: [
+					...state.books,
+					action.book
+				],
+				filteredBooks: [
+					...state.filteredBooks,
+					action.book
+				]
 			};
 		case FILTER_BY_VALUE:
 			const { value } = action;

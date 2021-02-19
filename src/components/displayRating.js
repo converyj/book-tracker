@@ -8,7 +8,7 @@ import Star from './Star';
  * 
  * rating holds the value of the star (1-5) for re-rendering of the page
  */
-class AddRating extends Component {
+class displayRating extends Component {
 	state = {
 		rating: 0
 	};
@@ -24,13 +24,21 @@ class AddRating extends Component {
 	};
 
 	render() {
-		const { setRate, rate } = this.props;
+		const { book } = this.props;
 
 		return (
 			<React.Fragment>
 				<div>
 					<span>Your Rating:</span>
-					<Star value={rate ? rate : 0} onClick={setRate} />
+					<Star
+						value={
+							book && localStorage.getItem(book.id) ? (
+								parseInt(localStorage.getItem(book.id))
+							) : (
+								0
+							)
+						}
+					/>
 				</div>
 			</React.Fragment>
 		);
@@ -41,4 +49,4 @@ class AddRating extends Component {
 // 	book: PropTypes.object.isRequired
 // };
 
-export default AddRating;
+export default displayRating;

@@ -13,6 +13,10 @@ class Home extends Component {
 		this.props.recieveBooks(books);
 	}
 
+	// componentWillUnmount() {
+	// 	saveBooksLS(this.props.books);
+	// }
+
 	filterBooks = (e) => {
 		const input = e.target.value;
 		this.props.filterByValue(input);
@@ -43,4 +47,9 @@ class Home extends Component {
 	}
 }
 
-export default connect(null, { recieveBooks, filterByValue, sortByAuthor, sortByDate })(Home);
+export default connect(null, {
+	recieveBooks,
+	filterByValue,
+	sortByAuthor,
+	sortByDate
+})(Home);

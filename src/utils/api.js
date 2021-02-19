@@ -58,3 +58,5 @@ export const searchBook = (query) => {
 		});
 	});
 };
+
+export const saveBooksLS = (books) => {};

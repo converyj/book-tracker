@@ -51,7 +51,7 @@ const Star = ({ value, onClick }) => {
 							src={src}
 							alt="rating"
 							width="20"
-							onClick={onClick && (() => onClick(index))} // enable click handler only if showing own ratings
+							onClick={onClick && (() => onClick(index + 1))} // enable click handler only if showing own ratings
 						/>
 					);
 				}))

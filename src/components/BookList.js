@@ -9,7 +9,11 @@ class BookList extends Component {
 		console.log(this.props.filteredBooks);
 		return (
 			<div className="books-grid">
-				{this.props.filteredBooks.map((book) => <Book key={book.id} book={book} />)}
+				{this.props.filteredBooks ? (
+					this.props.filteredBooks.map((book) => <Book key={book.id} book={book} />)
+				) : (
+					<h1>No Books</h1>
+				)}
 			</div>
 		);
 	}

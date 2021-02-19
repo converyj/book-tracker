@@ -1,0 +1,16 @@
+.search-grid form {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(2, 300px);
+}
+
+.form-group,
+.form-title {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.form-title {
+	flex-direction: column;
+}

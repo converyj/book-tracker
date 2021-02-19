@@ -66,4 +66,5 @@ button,
 textarea,
 select {
 	font: inherit;
+	margin-left: 1em;
 }
