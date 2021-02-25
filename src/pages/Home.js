@@ -26,10 +26,13 @@ class Home extends Component {
 	/* handle the sorting of books based on author or date */
 	handleSortedList = (e) => {
 		let sortBy = e.target.value;
+		console.log(sortBy);
 		if (sortBy === 'By Author') {
+			console.log('author');
 			this.props.sortByAuthor();
 		}
 		else {
+			console.log('ele');
 			this.props.sortByDate();
 		}
 	};

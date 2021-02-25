@@ -24,7 +24,11 @@ export class Header extends Component {
 					onChange={(e) => this.props.filterBooks(e)}
 				/>
 				<select name="sort" id="" onChange={(e) => this.props.handleSortedList(e)}>
-					{this.state.sortOptions.map((opt, i) => <option key={i}>{opt}</option>)}
+					{this.state.sortOptions.map((opt, i) => (
+						<option value={opt} key={i}>
+							{opt}
+						</option>
+					))}
 				</select>
 			</header>
 		);

@@ -1,10 +1,20 @@
-import { RECIEVE_BOOKS, SORT_BY_AUTHOR } from '../actions/books';
-import { FILTER_BY_VALUE, SORT_BY_DATE, ADD_BOOK } from './../actions/books';
+import {
+	RECIEVE_BOOKS,
+	FILTER_BY_VALUE,
+	SORT_BY_AUTHOR,
+	SORT_BY_DATE,
+	ADD_BOOK,
+	UPDATE_COMMENT
+} from '../actions/books';
 
 export default function books(state = {}, action) {
 	switch (action.type) {
 		case RECIEVE_BOOKS:
-			const { books } = action;
+			let { books } = action;
+
+			if (books == null) {
+				books = [];
+			}
 			return {
 				...state,
 				books,
@@ -63,21 +73,37 @@ export default function books(state = {}, action) {
 			return newState;
 		case SORT_BY_DATE:
 			let newSortByDateState = Object.assign({}, state);
-			let sortByDate = state.filteredBooks.sort((a, b) => a.date - b.date);
+			let sortByDate = state.filteredBooks.sort(
+				(a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
+			);
 
 			newSortByDateState.filteredBooks = sortByDate;
 
 			return newSortByDateState;
 		case SORT_BY_AUTHOR:
+			console.log(state);
 			let newSortByAuthorState = Object.assign({}, state);
-			let sortByAuthor = [
-				...state.filteredBooks
-			].sort((a, b) => a.author - b.author);
+			let sortByAuthor = state.filteredBooks.sort((a, b) => a.authors[0] - b.authors[0]);
 
 			console.log(sortByAuthor);
 			newSortByAuthorState.filteredBooks = sortByAuthor;
 
 			return newSortByAuthorState;
+
+		case UPDATE_COMMENT:
+			let newUpdatedBooks = Object.assign({}, state);
+
+			const updatedElements = state.books.map((book) => {
+				if (book.id == action.id) {
+					return { ...book, comment: action.comment };
+				}
+				return book;
+			});
+			newUpdatedBooks.books = updatedElements;
+			newUpdatedBooks.filteredBooks = updatedElements;
+
+			return newUpdatedBooks;
+
 		default:
 			return state;
 	}

@@ -3,6 +3,7 @@ import './dropdown.css';
 import { trancateTitle } from './../utils/helper';
 import { searchBook } from '../utils/api';
 import { PropTypes } from 'prop-types';
+import { handleAddBook } from '../actions/books';
 
 /**
  * @description Responsible for displaying the list of books 
@@ -54,28 +55,30 @@ export default function Dropdown({ query, setTitle }) {
 	return (
 		<React.Fragment>
 			<ul className="search-book-list">
-				{Object.values(books).map((book) => (
-					<li
-						key={book.id}
-						id={book.id}
-						onClick={(e) =>
-							handleBook(e.target.closest('.search-book-list__item').id, books)}
-						className="search-book-list__item">
-						<img
-							src={
-								book.volumeInfo.imageLinks &&
-								book.volumeInfo.imageLinks.smallThumbnail
-							}
-							alt=""
-						/>
-						<div>
-							<p className="search-book-list__item-title">
-								{trancateTitle(book.volumeInfo.title)}
-							</p>
-							<p>{book.volumeInfo.authors}</p>
-						</div>
-					</li>
-				))}
+				{books &&
+					books.length > 0 &&
+					Object.values(books).map((book) => (
+						<li
+							key={book.id}
+							id={book.id}
+							onClick={(e) =>
+								handleBook(e.target.closest('.search-book-list__item').id, books)}
+							className="search-book-list__item">
+							<img
+								src={
+									book.volumeInfo.imageLinks &&
+									book.volumeInfo.imageLinks.smallThumbnail
+								}
+								alt=""
+							/>
+							<div>
+								<p className="search-book-list__item-title">
+									{trancateTitle(book.volumeInfo.title)}
+								</p>
+								<p>{book.volumeInfo.authors}</p>
+							</div>
+						</li>
+					))}
 			</ul>
 		</React.Fragment>
 	);

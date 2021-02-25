@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-// import DatePickers from './../components/DatePickers';
 import Dropdown from './Dropdown';
 import './searchForm.css';
-import { addBook } from './../actions/books';
+import { handleAddBook } from './../actions/books';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Star from './Star';
 import AddRating from './AddRating';
+import DatePicker from './DatePicker';
 
 /**
  * @description Save input field state and add book 
@@ -17,7 +16,7 @@ class SearchForm extends Component {
 		title: '',
 		date: '',
 		comment: '',
-		rate: '',
+		rate: 0,
 		isLibraryBook: false,
 		showDropdown: false
 	};
@@ -51,13 +50,21 @@ class SearchForm extends Component {
 
 	/* add book */
 	handleAdd = () => {
-		const { book, comment, isLibraryBook, rate } = this.state;
-		this.props.addBook({ ...book, comment, isLibraryBook, rate });
+		const { book, date, comment, isLibraryBook, rate } = this.state;
+		this.props.handleAddBook({ ...book, date, comment, isLibraryBook, rate });
 	};
 
 	/* set the rate of book when user clicks on star */
 	setRate = (value) => {
 		this.setState({ rate: value });
+	};
+
+	handleInputChange = (e) => {
+		const target = e.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+		console.log(value, name);
+		this.setState({ [name]: value });
 	};
 
 	render() {
@@ -71,24 +78,16 @@ class SearchForm extends Component {
 							<input
 								type="text"
 								id="book-title"
+								name="title"
 								value={title}
-								onChange={(e) => this.setState({ title: e.target.value })}
+								onChange={this.handleInputChange}
 							/>
 						</div>
 
 						{showDropdown && <Dropdown query={title} setTitle={this.handleTitle} />}
 					</div>
 
-					{/* <DatePickers handleDateChange={(date) => this.setDate(date)} /> */}
-					<div className="form-group">
-						<label htmlFor="comment">Comment:</label>
-						<textarea
-							id="comment"
-							name="comment"
-							value={comment}
-							onChange={(e) => this.setState({ comment: e.target.value })}
-						/>
-					</div>
+					<DatePicker handleDate={this.setDate} />
 					<div className="form-group">
 						<label htmlFor="isLibraryBook">Library Book</label>
 						<input
@@ -96,14 +95,23 @@ class SearchForm extends Component {
 							id="isLibraryBook"
 							name="isLibraryBook"
 							value={isLibraryBook}
-							onChange={this.toggleLibraryBook}
+							onChange={this.handleInputChange}
+						/>
+					</div>
+					<div className="form-group">
+						<label htmlFor="comment">Comment</label>
+						<textarea
+							name="comment"
+							id="comment"
+							value={comment}
+							onChange={this.handleInputChange}
 						/>
 					</div>
 					<div className="form-group">
 						<AddRating setRate={this.setRate} rate={rate} />
 					</div>
 				</form>
-				<Link to="/" class="btn btn--form" type="button" onClick={this.handleAdd}>
+				<Link to="/" className="btn btn--form" type="button" onClick={this.handleAdd}>
 					ADD
 				</Link>
 			</div>
@@ -111,4 +119,4 @@ class SearchForm extends Component {
 	}
 }
 
-export default connect(null, { addBook })(SearchForm);
+export default connect(null, { handleAddBook })(SearchForm);

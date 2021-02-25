@@ -1,3 +1,8 @@
+export const formatDate = (date) => {
+	const newDate = new Date(date);
+	return newDate.toLocaleDateString();
+};
+
 export const trancateTitle = (title, limit = 17) => {
 	const newTitle = [];
 	if (title.length > limit) {
@@ -17,3 +22,20 @@ export const trancateTitle = (title, limit = 17) => {
 	}
 	return title;
 };
+
+export function formatBook(book) {
+	const { id, rate, comment, date, isLibraryBook } = book;
+	const { infoLink: link, title, authors } = book.volumeInfo;
+	const { smallThumbnail: image } = book.volumeInfo.imageLinks;
+	return {
+		id,
+		title,
+		authors,
+		image,
+		link,
+		date,
+		isLibraryBook,
+		rate,
+		comment
+	};
+}

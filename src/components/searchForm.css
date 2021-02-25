@@ -2,6 +2,7 @@
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(2, 300px);
+	justify-items: start;
 }
 
 .form-group,
@@ -9,6 +10,11 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	margin-top: 1em;
+}
+
+label {
+	margin-right: 1em;
 }
 
 .form-title {

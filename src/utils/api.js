@@ -1,54 +1,55 @@
 export const getBooksLS = () => {
-	return [
-		{
-			id: '1',
-			title: 'Great Alone',
-			author: 'Susan Greene',
-			comment: '',
-			date: '',
-			image:
-				'http://books.google.com/books/content?id=5N4PwQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-		},
-		{
-			id: '2',
-			title: 'The Unexpected',
-			author: 'John Olsen',
-			comment: '',
-			date: ''
-		},
-		{
-			id: '3',
-			title: 'Great Alone',
-			author: 'Susan Greene',
-			comment: '',
-			date: '',
-			image:
-				'http://books.google.com/books/content?id=5N4PwQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-		},
-		{
-			id: '4',
-			title: 'The Unexpected',
-			author: 'John Olsen',
-			comment: '',
-			date: ''
-		},
-		{
-			id: '5',
-			title: 'Great Alone',
-			author: 'Susan Greene',
-			comment: '',
-			date: '',
-			image:
-				'http://books.google.com/books/content?id=5N4PwQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-		},
-		{
-			id: '6',
-			title: 'The Unexpected',
-			author: 'John Olsen',
-			comment: '',
-			date: ''
-		}
-	];
+	return JSON.parse(localStorage.getItem('books'));
+	// return [
+	// 	{
+	// 		id: '1',
+	// 		title: 'Great Alone',
+	// 		author: 'Susan Greene',
+	// 		comment: '',
+	// 		date: '',
+	// 		image:
+	// 			'http://books.google.com/books/content?id=5N4PwQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
+	// 	},
+	// 	{
+	// 		id: '2',
+	// 		title: 'The Unexpected',
+	// 		author: 'John Olsen',
+	// 		comment: '',
+	// 		date: ''
+	// 	},
+	// 	{
+	// 		id: '3',
+	// 		title: 'Great Alone',
+	// 		author: 'Susan Greene',
+	// 		comment: '',
+	// 		date: '',
+	// 		image:
+	// 			'http://books.google.com/books/content?id=5N4PwQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
+	// 	},
+	// 	{
+	// 		id: '4',
+	// 		title: 'The Unexpected',
+	// 		author: 'John Olsen',
+	// 		comment: '',
+	// 		date: ''
+	// 	},
+	// 	{
+	// 		id: '5',
+	// 		title: 'Great Alone',
+	// 		author: 'Susan Greene',
+	// 		comment: '',
+	// 		date: '',
+	// 		image:
+	// 			'http://books.google.com/books/content?id=5N4PwQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
+	// 	},
+	// 	{
+	// 		id: '6',
+	// 		title: 'The Unexpected',
+	// 		author: 'John Olsen',
+	// 		comment: '',
+	// 		date: ''
+	// 	}
+	// ];
 };
 
 export const searchBook = (query) => {
@@ -59,4 +60,18 @@ export const searchBook = (query) => {
 	});
 };
 
-export const saveBooksLS = (books) => {};
+export const saveBooksLS = (book) => {
+	const books = [];
+	books.push(book);
+	let bookList = JSON.parse(localStorage.getItem('books'));
+	// if bookList already exist
+	if (bookList) {
+		console.log('exist');
+		bookList.push(book);
+		localStorage.setItem('books', JSON.stringify(bookList));
+	}
+	else {
+		// if bookList does not exist
+		localStorage.setItem('books', JSON.stringify(books));
+	}
+};

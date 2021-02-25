@@ -1,0 +1,11 @@
+.comment-field {
+	display: flex;
+	flex-direction: column;
+}
+
+.btnSmall {
+	justify-self: flex-end;
+	align-self: flex-end;
+	color: white;
+	background-color: green;
+}
