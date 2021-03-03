@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AddRating from './AddRating';
 import DatePicker from './DatePicker';
+import { withRouter } from 'react-router-dom';
 
 /**
  * @description Save input field state and add book 
@@ -50,6 +51,7 @@ class SearchForm extends Component {
 
 	/* add book */
 	handleAdd = () => {
+		console.log(this.props);
 		const { book, date, comment, isLibraryBook, rate } = this.state;
 		this.props.handleAddBook({ ...book, date, comment, isLibraryBook, rate });
 	};
@@ -119,4 +121,4 @@ class SearchForm extends Component {
 	}
 }
 
-export default connect(null, { handleAddBook })(SearchForm);
+export default withRouter(connect(null, { handleAddBook })(SearchForm));

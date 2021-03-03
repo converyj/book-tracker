@@ -6,7 +6,7 @@ Sort Books
 */
 
 import { formatBook } from '../utils/helper';
-import { saveBooksLS } from './../utils/api';
+import { saveBooksLS, getBooks, updateComment, saveBook } from './../utils/api';
 
 export const RECIEVE_BOOKS = 'RECIEVE_BOOKS';
 export const ADD_BOOK = 'ADD_BOOK';
@@ -56,11 +56,28 @@ export const updateBookComment = (id, comment) => {
 	};
 };
 
+/* add book */
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
 	console.log(formattedBook);
 	return (dispatch) => {
-		saveBooksLS(formattedBook);
+		saveBook(formattedBook);
 		dispatch(addBook(formattedBook));
 	};
 }
+
+/* Get books */
+export function handleInitialData() {
+	return (dispatch) => {
+		getBooks().then((books) => {
+			dispatch(recieveBooks(books));
+		});
+	};
+}
+
+/* update book comment */
+export const handleBookComment = (id, comment) => {
+	return (dispatch) => {
+		updateComment(id, comment).then(() => dispatch(updateBookComment(id, comment)));
+	};
+};

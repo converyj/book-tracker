@@ -3,16 +3,24 @@ import Header from './../components/Header';
 import { connect } from 'react-redux';
 import { getBooksLS } from '../utils/api';
 import BookList from '../components/BookList';
-import { recieveBooks, filterByValue, sortByAuthor, sortByDate } from '../actions/books';
+import {
+	recieveBooks,
+	filterByValue,
+	sortByAuthor,
+	sortByDate,
+	handleInitialData
+} from '../actions/books';
 import SearchBtn from '../components/SearchBtn';
 
 class Home extends Component {
 	componentWillMount() {
 		console.log('Home mounted');
-		const books = getBooksLS();
-		this.props.recieveBooks(books);
+		this.props.handleInitialData();
 	}
 
+	componentDidUpdate(prevProps, prevState) {
+		console.log(prevProps, prevState);
+	}
 	// componentWillUnmount() {
 	// 	saveBooksLS(this.props.books);
 	// }
@@ -53,7 +61,7 @@ class Home extends Component {
 }
 
 export default connect(null, {
-	recieveBooks,
+	handleInitialData,
 	filterByValue,
 	sortByAuthor,
 	sortByDate

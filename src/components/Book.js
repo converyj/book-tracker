@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -11,13 +11,25 @@ import CommentField from './CommentField';
  * @description Displays a book and the user's own rating 
  */
 const Book = ({ book }) => {
+	// whether to show the comment field
 	const [
 		showComment,
 		setShowComment
 	] = useState(false);
 
+	useEffect(
+		() => {
+			// update the showComment state when book object changes: when comment is updated
+			setShowComment(false);
+		},
+		[
+			book
+		]
+	);
+
+	// toggle showing the comment field
 	const handleShowComment = (show = !showComment) => {
-		setShowComment(show);
+		setShowComment(!showComment);
 	};
 	console.log(showComment);
 	return (

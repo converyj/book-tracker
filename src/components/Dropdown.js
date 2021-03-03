@@ -3,7 +3,6 @@ import './dropdown.css';
 import { trancateTitle } from './../utils/helper';
 import { searchBook } from '../utils/api';
 import { PropTypes } from 'prop-types';
-import { handleAddBook } from '../actions/books';
 
 /**
  * @description Responsible for displaying the list of books 
@@ -22,7 +21,10 @@ export default function Dropdown({ query, setTitle }) {
 	/* updates the list of books whenever query changes */
 	useEffect(
 		() => {
-			const search = () => searchBook(query).then((books) => setBooks(books));
+			const search = () =>
+				searchBook(query).then((books) => {
+					setBooks(books);
+				});
 			search();
 		},
 		[
