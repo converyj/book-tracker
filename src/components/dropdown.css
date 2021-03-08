@@ -1,6 +1,6 @@
 .search-book-list {
-	width: 50%;
-	height: 90%;
+	width: 60%;
+	height: 200px;
 	overflow-y: scroll;
 	box-shadow: 10px 0 0 rgba(0, 0, 0, 0.19);
 }

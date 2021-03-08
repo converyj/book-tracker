@@ -1,31 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { recieveBooks } from './../actions/books';
 import { connect } from 'react-redux';
 import Book from './../components/Book';
 import './bookList.css';
+import Pagination from './Pagination';
 
 /**
  * @description Display list of books user has read 
  */
 class BookList extends Component {
+	componentDidUpdate() {
+		console.log('updated List');
+	}
+
+	componentDidMount() {
+		console.log('list mounted');
+	}
 	render() {
-		console.log(this.props.filteredBooks);
+		const { filteredBooks } = this.props.books;
+		console.log(filteredBooks);
 		return (
-			<div className="books-grid">
-				{this.props.filteredBooks && this.props.filterBooks !== null ? (
-					this.props.filteredBooks.map((book) => <Book key={book.id} book={book} />)
-				) : (
-					<h1>No Books</h1>
-				)}
-			</div>
+			<Fragment>
+				<Pagination />
+				<div className="books-grid">
+					{filteredBooks && filteredBooks.length > 0 ? (
+						filteredBooks.map((book) => <Book key={book.id} book={book} />)
+					) : (
+						<h1>No Books</h1>
+					)}
+				</div>
+			</Fragment>
 		);
 	}
 }
 
 export default connect(
-	({ filteredBooks }) => {
+	({ books, loadingBar }) => {
 		return {
-			filteredBooks
+			books,
+			loading: loadingBar
 		};
 	},
 	{ recieveBooks }

@@ -45,8 +45,11 @@ li {
 }
 
 /* A elements that don't have a class get default styles */
-a:not([class]) {
+a {
 	text-decoration-skip-ink: auto;
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
 }
 
 /* Make images easier to work with */
@@ -66,4 +69,14 @@ button,
 textarea,
 select {
 	font: inherit;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+
+button {
+	cursor: pointer;
+}
+
+button + button {
+	margin-left: 1em;
 }

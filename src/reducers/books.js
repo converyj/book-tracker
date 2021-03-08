@@ -1,5 +1,7 @@
 import {
 	RECIEVE_BOOKS,
+	LOAD_NEW_PAGE,
+	LOAD_EXACT_PAGE,
 	FILTER_BY_VALUE,
 	SORT_BY_AUTHOR,
 	SORT_BY_DATE,
@@ -10,15 +12,114 @@ import {
 export default function books(state = {}, action) {
 	switch (action.type) {
 		case RECIEVE_BOOKS:
-			let { books } = action;
+			let totalBooks = Object.values(action.books).length;
+			const { books } = action;
+			let countPerPage = action.countPerPage || 20;
+
+			// Need the total number of pages. This is used in rendering the pagination component: round up pages
+			let totalPages = Math.ceil(totalBooks / countPerPage);
+			// only load 20 books to start with
 			// set books as array, not as an object
-			let bookValues = Object.values(books);
+			let allBooks = Object.values(books);
+			let filteredBooks = allBooks.slice(0, countPerPage);
 
 			return {
 				...state,
-				books: bookValues,
-				filteredBooks: bookValues
+				// all books unfiltered
+				books: allBooks,
+				filteredBooks: filteredBooks,
+				// currentCount is the 'upper count': current number of books seen so far. This changes throughout the app
+				currentCount: countPerPage,
+				countPerPage,
+				totalCount: totalBooks,
+				currentPage: 1,
+				// the total number of pages without any filters applied
+				totalPages,
+				// the total number of pages after a filter has been applied
+				filteredPages: totalPages
 			};
+
+		case LOAD_NEW_PAGE:
+			// clone the state
+			let loadNewPageState = { ...state };
+			console.log(loadNewPageState);
+			// how many pages should be added. Will always be 1 or -1
+			let addPages = action.payload.page;
+			// add it to the current page
+			loadNewPageState.currentPage += addPages;
+
+			let perPage = loadNewPageState.countPerPage; // 20 by default
+
+			let nextBooks;
+			// next page
+			if (addPages === 1) {
+				/*
+				1. Increase the current books shown 
+				- moving from page 1 to 2 will cause 'upperCount' to be 40
+				*/
+				let upperCount = loadNewPageState.currentCount + perPage;
+				// get the previous number of books shown: will be 20 (page 2)
+				let lowerCount = loadNewPageState.currentCount;
+				console.log(lowerCount, upperCount);
+				/* 2. Update the current number of books shown 
+				- change the currentCount to match the 'upperCount'. It'll be used as such at any point after this line
+				*/
+
+				loadNewPageState.currentCount += loadNewPageState.countPerPage;
+
+				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
+				console.log(loadNewPageState.books);
+				nextBooks = loadNewPageState.books.slice(lowerCount, upperCount);
+			}
+			// previous page
+			if (addPages === -1) {
+				/*
+				1. Decrease the number of books showm
+				- 'currentCount' has changed roles: now it serves as the upperCount - will be 40 (page 2)
+				*/
+				let upperCount = loadNewPageState.currentCount;
+				// get the previous number of books shown - will be 20 (page 2)
+				let lowerCount = loadNewPageState.currentCount - perPage; // decrease by 20
+
+				/* 2. Update the current number of books shown 
+				- change the currentCount to match the 'lowerCount'. It'll be used as such at any point after this line
+				*/
+				loadNewPageState.currentCount = lowerCount;
+
+				// 3. retrieve next books eg. within the range of 0-20 (for page 2)
+				nextBooks = loadNewPageState.books.slice(
+					lowerCount - perPage,
+					upperCount - perPage
+				);
+			}
+
+			// update filterdBooks
+			loadNewPageState.filteredBooks = nextBooks;
+			return loadNewPageState;
+
+		case LOAD_EXACT_PAGE:
+			const exactPageState = { ...state };
+			console.log(exactPageState);
+			// the page number
+			const exactPage = action.payload.page;
+			console.log(exactPage);
+			// 1. get the number of books seen so far eg 20 * 2 = 40 books
+			let upperCountExact = exactPageState.countPerPage * exactPage;
+			console.log(upperCountExact);
+			// get the previous number of books shown
+			let lowerCountExact = upperCountExact - exactPageState.countPerPage;
+			console.log(lowerCountExact);
+
+			// 2. retrieve next books eg. within the 40-60 range (page 3)
+			let exactBooks = exactPageState.books.slice(lowerCountExact, upperCountExact);
+			console.log(exactBooks);
+			// update filtered books
+			exactPageState.filteredBooks = exactBooks;
+			// update the current books shown and current page
+			exactPageState.currentCount = upperCountExact;
+			exactPageState.currentPage = exactPage;
+
+			return exactPageState;
 		case ADD_BOOK:
 			return {
 				...state,
@@ -66,9 +167,7 @@ export default function books(state = {}, action) {
 			return newState;
 		case SORT_BY_DATE:
 			let newSortByDateState = Object.assign({}, state);
-			let sortByDate = state.filteredBooks.sort(
-				(a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
-			);
+			let sortByDate = state.filteredBooks.sort((a, b) => a.date - b.date);
 
 			newSortByDateState.filteredBooks = sortByDate;
 

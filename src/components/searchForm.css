@@ -1,8 +1,16 @@
 .search-grid form {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: repeat(2, 300px);
+	display: flex;
+	flex-wrap: wrap;
+
 	justify-items: start;
+	align-items: flex-start;
+}
+@media (min-width: 800px) {
+	.search-grid form {
+		grid-template-columns: repeat(4, minmax(300px, 1fr));
+		grid-template-rows: repeat(2, 300px);
+		display: grid;
+	}
 }
 
 .form-group,
@@ -19,4 +27,15 @@ label {
 
 .form-title {
 	flex-direction: column;
+}
+
+.btn {
+	margin-top: 1em;
+	display: inline-block;
+	padding: 1em 1.25em;
+	border-radius: 10px;
+	border: none;
+}
+.btn--form {
+	background: #eee;
 }

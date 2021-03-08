@@ -5,7 +5,7 @@ import App from './App';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import middleware from './middleware';
-import reducers from './reducers/books';
+import reducers from './reducers/';
 import { BrowserRouter } from 'react-router-dom';
 
 const store = createStore(reducers, middleware);

@@ -1,0 +1,13 @@
+.pagination-nav {
+	display: flex;
+	justify-content: space-between;
+}
+
+.pagination-nav-buttons {
+	order: 3;
+}
+
+.is-current {
+	background: green;
+	font-weight: bold;
+}

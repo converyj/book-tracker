@@ -21,16 +21,39 @@ export default function Dropdown({ query, setTitle }) {
 	/* updates the list of books whenever query changes */
 	useEffect(
 		() => {
-			const search = () =>
-				searchBook(query).then((books) => {
-					setBooks(books);
-				});
-			search();
+			if (query.length > 0) {
+				const search = () =>
+					searchBook(query).then((allBooks) => {
+						const books = allBooks.filter((book) =>
+							book.volumeInfo.hasOwnProperty('authors')
+						);
+						setBooks(books);
+					});
+
+				search();
+			}
 		},
 		[
 			query
 		]
 	);
+
+	// /* updates the list of books whenever query changes */
+	// useEffect(
+	// 	(books) => {
+
+	// 				const books = books.filter((book) =>
+	// 					console.log(book.volumeInfo.hasOwnProperty('author'))
+	// 				);
+
+	// 				setBooks(books);
+	// 			});
+
+	// 	},
+	// 	[
+	// 		books
+	// 	]
+	// );
 
 	/* Callback function to set the selected book that was clicked on from the list of books */
 	const handleBook = useCallback(

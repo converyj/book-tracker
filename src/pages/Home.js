@@ -18,13 +18,6 @@ class Home extends Component {
 		this.props.handleInitialData();
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		console.log(prevProps, prevState);
-	}
-	// componentWillUnmount() {
-	// 	saveBooksLS(this.props.books);
-	// }
-
 	/* handle the filtering of books */
 	filterBooks = (e) => {
 		const input = e.target.value;
@@ -53,16 +46,24 @@ class Home extends Component {
 					filterBooks={(e) => this.filterBooks(e)}
 					handleSortedList={(e) => this.handleSortedList(e)}
 				/>
-				<BookList />
+
+				{this.props.loading.default == 1 ? <h1>Loading</h1> : <BookList />}
 				<SearchBtn />
 			</div>
 		);
 	}
 }
 
-export default connect(null, {
-	handleInitialData,
-	filterByValue,
-	sortByAuthor,
-	sortByDate
-})(Home);
+export default connect(
+	({ loadingBar }) => {
+		return {
+			loading: loadingBar
+		};
+	},
+	{
+		handleInitialData,
+		filterByValue,
+		sortByAuthor,
+		sortByDate
+	}
+)(Home);
