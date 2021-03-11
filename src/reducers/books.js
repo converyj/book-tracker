@@ -70,11 +70,11 @@ export default function books(state = {}, action) {
 
 				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
 				console.log(loadNewPageState.books);
-				let slicedArr =
-					loadNewPageState.appliedFilters.length > 0
-						? loadNewPageState.filteredBooks
-						: loadNewPageState.books;
-				console.log(slicedArr);
+				// let slicedArr =
+				// 	loadNewPageState.appliedFilters.length > 0
+				// 		? loadNewPageState.filteredBooks
+				// 		: loadNewPageState.books;
+				// console.log(slicedArr);
 				nextBooks = loadNewPageState.books.slice(lowerCount, upperCount);
 			}
 			// previous page
@@ -93,10 +93,10 @@ export default function books(state = {}, action) {
 				loadNewPageState.currentCount = lowerCount;
 
 				// 3. retrieve next books eg. within the range of 0-20 (for page 2)
-				let slicedArr =
-					loadNewPageState.filteredBooks.length < loadNewPageState.books.length
-						? loadNewPageState.filteredBooks
-						: loadNewPageState.books;
+				// let slicedArr =
+				// 	loadNewPageState.filteredBooks.length < loadNewPageState.books.length
+				// 		? loadNewPageState.filteredBooks
+				// 		: loadNewPageState.books;
 				nextBooks = loadNewPageState.books.slice(
 					lowerCount - perPage,
 					upperCount - perPage
@@ -194,9 +194,9 @@ export default function books(state = {}, action) {
 
 			newSortByDateState.filteredBooks = sortByDate;
 			// delete the sortByAuthor filter
-			let authorIndex = newSortByDateState.appliedFilters.indexOf(SORT_BY_AUTHOR);
-			newSortByDateState.appliedFilters.splice(authorIndex, 1);
-			newSortByDateState.appliedFilters.push(SORT_BY_DATE);
+			// let authorIndex = newSortByDateState.appliedFilters.indexOf(SORT_BY_AUTHOR);
+			// newSortByDateState.appliedFilters.splice(authorIndex, 1);
+			// newSortByDateState.appliedFilters.push(SORT_BY_DATE);
 			console.log(newSortByDateState, state);
 			return newSortByDateState;
 		case SORT_BY_AUTHOR:
@@ -209,10 +209,10 @@ export default function books(state = {}, action) {
 			console.log(sortByAuthor);
 			newSortByAuthorState.filteredBooks = sortByAuthor;
 			// delete the sortByDate filter
-			let dateIndex = newSortByAuthorState.appliedFilters.indexOf(SORT_BY_DATE);
-			console.log(dateIndex);
-			newSortByAuthorState.appliedFilters.splice(dateIndex, 1);
-			newSortByAuthorState.appliedFilters.push(SORT_BY_AUTHOR);
+			// let dateIndex = newSortByAuthorState.appliedFilters.indexOf(SORT_BY_DATE);
+			// console.log(dateIndex);
+			// newSortByAuthorState.appliedFilters.splice(dateIndex, 1);
+			// newSortByAuthorState.appliedFilters.push(SORT_BY_AUTHOR);
 
 			return newSortByAuthorState;
 
