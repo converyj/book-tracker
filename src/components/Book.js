@@ -46,10 +46,10 @@ const Book = ({ book }) => {
 					/>
 				</div>
 
-				<div className="book-title">{book.title}</div>
-				<div className="book-authors">
+				<h4 className="book-title">{book.title}</h4>
+				<p className="book-authors">
 					{book.authors ? book.authors.join(',') : 'No Author'}
-				</div>
+				</p>
 				<DisplayRating book={book} />
 				<div className="book-info">
 					<div className="date-read">

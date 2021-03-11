@@ -1,3 +1,4 @@
+import { computeHeadingLevel } from '@testing-library/dom';
 import {
 	RECIEVE_BOOKS,
 	LOAD_NEW_PAGE,
@@ -69,6 +70,11 @@ export default function books(state = {}, action) {
 
 				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
 				console.log(loadNewPageState.books);
+				let slicedArr =
+					loadNewPageState.appliedFilters.length > 0
+						? loadNewPageState.filteredBooks
+						: loadNewPageState.books;
+				console.log(slicedArr);
 				nextBooks = loadNewPageState.books.slice(lowerCount, upperCount);
 			}
 			// previous page
@@ -87,6 +93,10 @@ export default function books(state = {}, action) {
 				loadNewPageState.currentCount = lowerCount;
 
 				// 3. retrieve next books eg. within the range of 0-20 (for page 2)
+				let slicedArr =
+					loadNewPageState.filteredBooks.length < loadNewPageState.books.length
+						? loadNewPageState.filteredBooks
+						: loadNewPageState.books;
 				nextBooks = loadNewPageState.books.slice(
 					lowerCount - perPage,
 					upperCount - perPage
@@ -135,50 +145,74 @@ export default function books(state = {}, action) {
 		case FILTER_BY_VALUE:
 			const { value } = action;
 			// clone the state - do not motify initial state
-			let newState = { ...state };
-			console.log(state, newState);
+			let newState = Object.assign({}, state);
+			const filteredValues = state.books.filter((book) => {
+				return book.title.toLowerCase().includes(value);
+			});
 
+			let appliedFilters = state.appliedFilters || [];
+			//if the value from the input box is not empty
 			if (value) {
-				const filteredValues = state.books.filter((book) => {
-					return book.title.toLowerCase().includes(value);
-				});
+				console.log('value no empty');
 				console.log(filteredValues);
-				newState.filteredBooks = filteredValues;
-				// let appliedFilters = state.appliedFilters;
-				//if the value from the input box is not empty
+				let index = appliedFilters.indexOf(FILTER_BY_VALUE);
+				if (index === -1) {
+					//if it doesn’t, add it.
+					appliedFilters.push(FILTER_BY_VALUE);
+					newState.filteredBooks = filteredValues;
 
-				//check if the filter already exists in the tracking array
-				// let index = appliedFilters.indexOf(FILTER_BY_VALUE);
-				// if (index === -1)
-				// 	//filter does not exist, add it to tracking array
-				// 	appliedFilters.push(FILTER_BY_VALUE);
-				//change the filtered books to reflect the change
+					// update number of pages with filtered books
+					newState.filteredCount = newState.filteredBooks.length;
+					newState.filteredPages = Math.ceil(
+						newState.filteredCount / newState.countPerPage
+					);
+				}
 			}
 			else {
 				//if the value is empty, we can assume everything has been erased
-				// let index = appliedFilters.indexOf(FILTER_BY_VALUE);
+				let index = appliedFilters.indexOf(FILTER_BY_VALUE);
 				//in that case, remove the current filter
-				// appliedFilters.splice(index, 1);
-				// if (appliedFilters.length === 0) {
-				//if there are no filters applied, reset the books to normal
-				newState.filteredBooks = newState.books;
+				appliedFilters.splice(index, 1);
+				if (appliedFilters.length === 0) {
+					console.log('0');
+					//if there are no filters applied, reset the books to normal.
+					newState.filteredBooks = newState.books.slice(0, newState.countPerPage);
+					// set the filteredPages back to the total number of pages
+					newState.filteredPages = newState.totalPages;
+					// console.log(currentCount);
+					newState.filteredCount = newState.filteredBooks.length;
+				}
 			}
 
 			return newState;
 		case SORT_BY_DATE:
 			let newSortByDateState = Object.assign({}, state);
-			let sortByDate = state.filteredBooks.sort((a, b) => a.date - b.date);
+
+			let sortByDate = state.filteredBooks.sort((a, b) => {
+				return b.date > a.date ? 1 : a.date > b.date ? -1 : 0;
+			});
 
 			newSortByDateState.filteredBooks = sortByDate;
-
+			// delete the sortByAuthor filter
+			let authorIndex = newSortByDateState.appliedFilters.indexOf(SORT_BY_AUTHOR);
+			newSortByDateState.appliedFilters.splice(authorIndex, 1);
+			newSortByDateState.appliedFilters.push(SORT_BY_DATE);
+			console.log(newSortByDateState, state);
 			return newSortByDateState;
 		case SORT_BY_AUTHOR:
 			console.log(state);
 			let newSortByAuthorState = Object.assign({}, state);
-			let sortByAuthor = state.filteredBooks.sort((a, b) => a.authors[0] - b.authors[0]);
+			let sortByAuthor = state.filteredBooks.sort((a, b) => {
+				return a.authors - b.authors ? 1 : b.authors > a.authors ? -1 : 0;
+			});
 
 			console.log(sortByAuthor);
 			newSortByAuthorState.filteredBooks = sortByAuthor;
+			// delete the sortByDate filter
+			let dateIndex = newSortByAuthorState.appliedFilters.indexOf(SORT_BY_DATE);
+			console.log(dateIndex);
+			newSortByAuthorState.appliedFilters.splice(dateIndex, 1);
+			newSortByAuthorState.appliedFilters.push(SORT_BY_AUTHOR);
 
 			return newSortByAuthorState;
 

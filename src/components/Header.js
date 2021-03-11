@@ -23,7 +23,13 @@ export class Header extends Component {
 					aria-label="Search"
 					onChange={(e) => this.props.filterBooks(e)}
 				/>
-				<select name="sort" id="" onChange={(e) => this.props.handleSortedList(e)}>
+
+				<select
+					name="sort"
+					onChange={(e) => this.props.handleSortedList(e)}
+					aria-label="Sort By"
+					defaultValue="Sort by">
+					<option value="">Sort by</option>
 					{this.state.sortOptions.map((opt, i) => (
 						<option value={opt} key={i}>
 							{opt}

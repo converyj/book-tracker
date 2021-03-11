@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Header from './../components/Header';
 import { connect } from 'react-redux';
 import { getBooksLS } from '../utils/api';
@@ -47,8 +47,16 @@ class Home extends Component {
 					handleSortedList={(e) => this.handleSortedList(e)}
 				/>
 
-				{this.props.loading.default == 1 ? <h1>Loading</h1> : <BookList />}
-				<SearchBtn />
+				{this.props.loading.default == 1 ? (
+					<div className="books-grid">
+						<h1>Loading</h1>
+					</div>
+				) : (
+					<Fragment>
+						<BookList />
+						<SearchBtn />
+					</Fragment>
+				)}
 			</div>
 		);
 	}

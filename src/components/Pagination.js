@@ -26,7 +26,7 @@ class Pagination extends Component {
 		return (
 			<section className="pagination">
 				<nav className="pagination-nav">
-					<div class="pagination-nav-buttons">
+					<div className="pagination-nav-buttons">
 						<button
 							className="btn pagination-previous"
 							onClick={this.previousPage}
@@ -36,7 +36,9 @@ class Pagination extends Component {
 						<button
 							className="btn pagination-next"
 							onClick={this.nextPage}
-							disabled={currentPage == totalPages ? true : false}>
+							disabled={
+								filteredPages == 1 || currentPage == totalPages ? true : false
+							}>
 							Next Page
 						</button>
 					</div>

@@ -69,12 +69,12 @@ button,
 textarea,
 select {
 	font: inherit;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 }
 
 button {
 	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
 }
 
 button + button {
