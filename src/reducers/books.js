@@ -9,6 +9,7 @@ import {
 	ADD_BOOK,
 	UPDATE_COMMENT
 } from '../actions/books';
+import { addFilterIfNotExist, removeFilterIfExist } from '../utils/helper';
 
 export default function books(state = {}, action) {
 	switch (action.type) {
@@ -37,7 +38,8 @@ export default function books(state = {}, action) {
 				// the total number of pages without any filters applied
 				totalPages,
 				// the total number of pages after a filter has been applied
-				filteredPages: totalPages
+				filteredPages: totalPages,
+				appliedFilters: []
 			};
 
 		case LOAD_NEW_PAGE:
@@ -69,12 +71,7 @@ export default function books(state = {}, action) {
 				loadNewPageState.currentCount += loadNewPageState.countPerPage;
 
 				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
-				console.log(loadNewPageState.books);
-				// let slicedArr =
-				// 	loadNewPageState.appliedFilters.length > 0
-				// 		? loadNewPageState.filteredBooks
-				// 		: loadNewPageState.books;
-				// console.log(slicedArr);
+				// use 'books' array rather than 'filteredBooks' because using 'filterBooks' would result in an empty array since we only have 20 books there when the page first loads
 				nextBooks = loadNewPageState.books.slice(lowerCount, upperCount);
 			}
 			// previous page
@@ -149,39 +146,34 @@ export default function books(state = {}, action) {
 			const filteredValues = state.books.filter((book) => {
 				return book.title.toLowerCase().includes(value);
 			});
-
-			let appliedFilters = state.appliedFilters || [];
 			//if the value from the input box is not empty
 			if (value) {
 				console.log('value no empty');
 				console.log(filteredValues);
-				let index = appliedFilters.indexOf(FILTER_BY_VALUE);
-				if (index === -1) {
-					//if it doesn’t, add it.
-					appliedFilters.push(FILTER_BY_VALUE);
-					newState.filteredBooks = filteredValues;
+				// add the sortByValue filter if doesn't exist
+				newState.appliedFilters = addFilterIfNotExist(
+					FILTER_BY_VALUE,
+					newState.appliedFilters
+				);
 
-					// update number of pages with filtered books
-					newState.filteredCount = newState.filteredBooks.length;
-					newState.filteredPages = Math.ceil(
-						newState.filteredCount / newState.countPerPage
-					);
-				}
+				newState.filteredBooks = filteredValues;
+
+				// update number of pages with filtered books
+				newState.filteredCount = newState.filteredBooks.length;
+				newState.filteredPages = Math.ceil(newState.filteredCount / newState.countPerPage);
 			}
 			else {
 				//if the value is empty, we can assume everything has been erased
-				let index = appliedFilters.indexOf(FILTER_BY_VALUE);
 				//in that case, remove the current filter
-				appliedFilters.splice(index, 1);
-				if (appliedFilters.length === 0) {
-					console.log('0');
-					//if there are no filters applied, reset the books to normal.
-					newState.filteredBooks = newState.books.slice(0, newState.countPerPage);
-					// set the filteredPages back to the total number of pages
-					newState.filteredPages = newState.totalPages;
-					// console.log(currentCount);
-					newState.filteredCount = newState.filteredBooks.length;
-				}
+				newState.appliedFilters = removeFilterIfExist(
+					FILTER_BY_VALUE,
+					newState.appliedFilters
+				);
+
+				// set the filteredPages back to the total number of pages
+				newState.filteredPages = newState.totalPages;
+				// console.log(currentCount);
+				newState.filteredCount = newState.filteredBooks.length;
 			}
 
 			return newState;
@@ -192,11 +184,20 @@ export default function books(state = {}, action) {
 				return b.date > a.date ? 1 : a.date > b.date ? -1 : 0;
 			});
 
+			console.log(newSortByDateState);
+
 			newSortByDateState.filteredBooks = sortByDate;
 			// delete the sortByAuthor filter
-			// let authorIndex = newSortByDateState.appliedFilters.indexOf(SORT_BY_AUTHOR);
-			// newSortByDateState.appliedFilters.splice(authorIndex, 1);
-			// newSortByDateState.appliedFilters.push(SORT_BY_DATE);
+			newSortByDateState.appliedFilters = removeFilterIfExist(
+				SORT_BY_AUTHOR,
+				newSortByDateState.appliedFilters
+			);
+
+			newSortByDateState.appliedFilters = addFilterIfNotExist(
+				SORT_BY_DATE,
+				newSortByDateState.appliedFilters
+			);
+
 			console.log(newSortByDateState, state);
 			return newSortByDateState;
 		case SORT_BY_AUTHOR:
@@ -209,10 +210,15 @@ export default function books(state = {}, action) {
 			console.log(sortByAuthor);
 			newSortByAuthorState.filteredBooks = sortByAuthor;
 			// delete the sortByDate filter
-			// let dateIndex = newSortByAuthorState.appliedFilters.indexOf(SORT_BY_DATE);
-			// console.log(dateIndex);
-			// newSortByAuthorState.appliedFilters.splice(dateIndex, 1);
-			// newSortByAuthorState.appliedFilters.push(SORT_BY_AUTHOR);
+			newSortByAuthorState.appliedFilters = removeFilterIfExist(
+				SORT_BY_DATE,
+				newSortByAuthorState.appliedFilters
+			);
+
+			newSortByAuthorState.appliedFilters = addFilterIfNotExist(
+				SORT_BY_AUTHOR,
+				newSortByAuthorState.appliedFilters
+			);
 
 			return newSortByAuthorState;
 

@@ -48,7 +48,7 @@ const Book = ({ book }) => {
 
 				<h4 className="book-title">{book.title}</h4>
 				<p className="book-authors">
-					{book.authors ? book.authors.join(',') : 'No Author'}
+					{book.authors ? book.authors.join(', ') : 'No Author'}
 				</p>
 				<DisplayRating book={book} />
 				<div className="book-info">
@@ -63,7 +63,7 @@ const Book = ({ book }) => {
 						readOnly
 					/>
 					<label id="isLibraryBook">Library Book</label>
-					<div className="form-group" onClick={handleShowComment}>
+					<div className="form-group comment" onClick={handleShowComment}>
 						Comment {showComment ? <ExpandLess /> : <ExpandMore />}
 					</div>
 					{showComment && (

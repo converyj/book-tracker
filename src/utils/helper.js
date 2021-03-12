@@ -39,3 +39,21 @@ export function formatBook(book) {
 		comment
 	};
 }
+
+export const addFilterIfNotExist = (filter, appliedFilters) => {
+	let index = appliedFilters.indexOf(filter);
+	if (index === -1) {
+		appliedFilters.push(filter);
+	}
+
+	return appliedFilters;
+};
+
+export const removeFilterIfExist = (filter, appliedFilters) => {
+	let index = appliedFilters.indexOf(filter);
+	if (index === 0) {
+		appliedFilters.splice(index, 1);
+	}
+
+	return appliedFilters;
+};

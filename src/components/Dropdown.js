@@ -18,14 +18,16 @@ export default function Dropdown({ query, setTitle }) {
 		setSelected
 	] = useState({});
 
-	/* updates the list of books whenever query changes */
+	/* updates the list of books whenever query changes only with book's that have authors are are not duplicates*/
 	useEffect(
 		() => {
 			if (query.length > 0) {
 				const search = () =>
 					searchBook(query).then((allBooks) => {
-						const books = allBooks.filter((book) =>
-							book.volumeInfo.hasOwnProperty('authors')
+						const books = allBooks.filter(
+							(book, index, arr) =>
+								book.volumeInfo.hasOwnProperty('authors') &&
+								index === arr.findIndex((b) => b.authors === book.authors)
 						);
 						setBooks(books);
 					});
@@ -100,7 +102,7 @@ export default function Dropdown({ query, setTitle }) {
 								<p className="search-book-list__item-title">
 									{trancateTitle(book.volumeInfo.title)}
 								</p>
-								<p>{book.volumeInfo.authors}</p>
+								<p>{book.volumeInfo.authors.join(', ')}</p>
 							</div>
 						</li>
 					))}

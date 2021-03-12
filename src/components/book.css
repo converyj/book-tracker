@@ -37,3 +37,7 @@
 .book-info {
 	margin-top: .5em;
 }
+
+.comment {
+	cursor: pointer;
+}

@@ -32,7 +32,7 @@ class Home extends Component {
 			console.log('author');
 			this.props.sortByAuthor();
 		}
-		else {
+		else if (sortBy === 'By Date') {
 			console.log('ele');
 			this.props.sortByDate();
 		}
