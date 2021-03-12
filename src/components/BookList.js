@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { sortByAuthor, sortByDate } from './../actions/books';
+import { sortByAuthor, sortByDate, filterByValue } from './../actions/books';
 import { connect } from 'react-redux';
 import Book from './../components/Book';
 import './bookList.css';
@@ -31,6 +31,10 @@ class BookList extends Component {
 
 				case 'SORT_BY_AUTHOR':
 					this.props.sortByAuthor();
+					break;
+
+				case 'FILTER_BY_VALUE':
+					this.props.filterByValue();
 					break;
 			}
 		}
@@ -64,5 +68,5 @@ export default connect(
 			loading: loadingBar
 		};
 	},
-	{ sortByAuthor, sortByDate }
+	{ sortByAuthor, sortByDate, filterByValue }
 )(BookList);
