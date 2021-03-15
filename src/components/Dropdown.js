@@ -24,12 +24,21 @@ export default function Dropdown({ query, setTitle }) {
 			if (query.length > 0) {
 				const search = () =>
 					searchBook(query).then((allBooks) => {
-						const books = allBooks.filter(
-							(book, index, arr) =>
-								book.volumeInfo.hasOwnProperty('authors') &&
-								index === arr.findIndex((b) => b.authors === book.authors)
-						);
-						setBooks(books);
+						console.log(allBooks);
+						const filteredArr = allBooks.reduce((acc, current) => {
+							const x = acc.find((item) => {
+								if (!item) return;
+								return item.id === current.id;
+							});
+							console.log(x);
+							if (!x) {
+								return acc.concat(current);
+							}
+							else {
+								return acc;
+							}
+						}, []);
+						setBooks(filteredArr);
 					});
 
 				search();
@@ -102,7 +111,7 @@ export default function Dropdown({ query, setTitle }) {
 								<p className="search-book-list__item-title">
 									{trancateTitle(book.volumeInfo.title)}
 								</p>
-								<p>{book.volumeInfo.authors.join(', ')}</p>
+								{/* <p>{book.volumeInfo.authors.join(', ')}</p> */}
 							</div>
 						</li>
 					))}

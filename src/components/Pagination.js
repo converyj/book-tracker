@@ -21,7 +21,7 @@ class Pagination extends Component {
 	};
 
 	render() {
-		const { filteredPages, currentPage, totalPages } = this.props;
+		const { filteredPages, filteredBooks, currentPage, totalPages } = this.props;
 		console.log(currentPage, totalPages);
 		return (
 			<section className="pagination">
@@ -67,7 +67,8 @@ export default withRouter(
 			return {
 				filteredPages: books.filteredPages,
 				totalPages: books.totalPages,
-				currentPage: books.currentPage
+				currentPage: books.currentPage,
+				filteredBooks: books.filteredBooks
 			};
 		},
 		{ loadExactPage, loadNewPage }

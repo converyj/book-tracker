@@ -23,20 +23,22 @@ class BookList extends Component {
 			this.props.books.appliedFilters.length > 0
 		) {
 			console.log('filter');
-			const filter = this.props.books.appliedFilters[0];
-			switch (filter) {
-				case 'SORT_BY_DATE':
-					this.props.sortByDate();
-					break;
+			const filter = this.props.books.appliedFilters;
+			filter.forEach((filter) => {
+				switch (filter) {
+					case 'SORT_BY_DATE':
+						this.props.sortByDate();
+						break;
 
-				case 'SORT_BY_AUTHOR':
-					this.props.sortByAuthor();
-					break;
+					case 'SORT_BY_AUTHOR':
+						this.props.sortByAuthor();
+						break;
 
-				case 'FILTER_BY_VALUE':
-					this.props.filterByValue();
-					break;
-			}
+					case 'FILTER_BY_VALUE':
+						this.props.filterByValue();
+						break;
+				}
+			});
 		}
 	}
 
@@ -44,11 +46,11 @@ class BookList extends Component {
 		console.log('list mounted');
 	}
 	render() {
-		const { filteredBooks } = this.props.books;
+		const { filteredBooks, filteredPages } = this.props.books;
 		console.log(filteredBooks);
 		return (
 			<Fragment>
-				<Pagination />
+				{filteredPages > 0 && <Pagination />}
 				<div className="books-grid">
 					{filteredBooks && filteredBooks.length > 0 ? (
 						filteredBooks.map((book) => <Book key={book.id} book={book} />)

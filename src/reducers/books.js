@@ -143,11 +143,11 @@ export default function books(state = {}, action) {
 			const { value } = action;
 			// clone the state - do not motify initial state
 			let newState = Object.assign({}, state);
-			const filteredValues = state.books.filter((book) => {
-				return book.title.toLowerCase().includes(value);
-			});
 			//if the value from the input box is not empty
 			if (value) {
+				const filteredValues = state.books.filter((book) => {
+					return book.title.toLowerCase().includes(value);
+				});
 				console.log('value no empty');
 				console.log(filteredValues);
 				// add the sortByValue filter if doesn't exist
@@ -163,6 +163,7 @@ export default function books(state = {}, action) {
 				newState.filteredPages = Math.ceil(newState.filteredCount / newState.countPerPage);
 			}
 			else {
+				console.log('else');
 				//if the value is empty, we can assume everything has been erased
 				//in that case, remove the current filter
 				newState.appliedFilters = removeFilterIfExist(
@@ -170,10 +171,13 @@ export default function books(state = {}, action) {
 					newState.appliedFilters
 				);
 
-				// set the filteredPages back to the total number of pages
-				newState.filteredPages = newState.totalPages;
-				// console.log(currentCount);
+				// set the state back
+				newState.filteredBooks = newState.books.slice(
+					newState.currentPage === 1 ? 0 : newState.countPerPage,
+					newState.currentCount
+				);
 				newState.filteredCount = newState.filteredBooks.length;
+				newState.filteredPages = newState.totalPages;
 			}
 
 			return newState;

@@ -51,7 +51,8 @@ export const addFilterIfNotExist = (filter, appliedFilters) => {
 
 export const removeFilterIfExist = (filter, appliedFilters) => {
 	let index = appliedFilters.indexOf(filter);
-	if (index === 0) {
+	console.log(index);
+	if (index >= 0) {
 		appliedFilters.splice(index, 1);
 	}
 

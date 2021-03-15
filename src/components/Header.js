@@ -19,7 +19,7 @@ export class Header extends Component {
 			<header>
 				<input
 					type="text"
-					placeholder="Search By Title or Author"
+					placeholder="Search By Title"
 					aria-label="Search"
 					onChange={(e) => this.props.filterBooks(e)}
 				/>
@@ -28,8 +28,10 @@ export class Header extends Component {
 					name="sort"
 					onChange={(e) => this.props.handleSortedList(e)}
 					aria-label="Sort By"
-					defaultValue="Sort by">
-					<option value="">Sort by</option>
+					defaultValue="Sort By">
+					<option value="Sort By" disabled>
+						Sort by
+					</option>
 					{this.state.sortOptions.map((opt, i) => (
 						<option value={opt} key={i}>
 							{opt}
