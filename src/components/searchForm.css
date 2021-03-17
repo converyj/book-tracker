@@ -1,15 +1,18 @@
+.search-grid {
+	margin: 1em 0;
+}
+
 .search-grid form {
 	display: flex;
-	flex-wrap: wrap;
-
+	gap: 3em;
+	flex-direction: column;
 	justify-items: start;
-	align-items: flex-start;
+	align-items: baseline;
 }
 @media (min-width: 800px) {
 	.search-grid form {
-		grid-template-columns: repeat(4, minmax(300px, 1fr));
-		grid-template-rows: repeat(2, 300px);
-		display: grid;
+		flex-wrap: wrap;
+		flex-direction: row;
 	}
 }
 
@@ -18,7 +21,6 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: 1em;
 }
 
 label {
@@ -30,7 +32,7 @@ label {
 }
 
 .btn {
-	margin-top: 1em;
+	margin-top: 4em;
 	display: inline-block;
 	padding: 1em 1.25em;
 	border-radius: 10px;

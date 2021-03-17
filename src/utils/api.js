@@ -1,6 +1,4 @@
-import { objectOf } from 'prop-types';
 import firebase from '../firebase';
-import { filterByValue } from './../actions/books';
 
 // callback as a Promise
 const getData = (ref) => {
@@ -26,11 +24,9 @@ export const getBooks = () => {
 
 /* search books using the Google Books API */
 export const searchBook = (query) => {
-	return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`).then((res) => {
-		return res.json().then((data) => {
-			return data.items;
-		});
-	});
+	return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+		.then((res) => res.json())
+		.then((data) => data.items);
 };
 
 /* save the added book to Firebase 
