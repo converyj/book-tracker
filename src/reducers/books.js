@@ -90,10 +90,6 @@ export default function books(state = {}, action) {
 				loadNewPageState.currentCount = lowerCount;
 
 				// 3. retrieve next books eg. within the range of 0-20 (for page 2)
-				// let slicedArr =
-				// 	loadNewPageState.filteredBooks.length < loadNewPageState.books.length
-				// 		? loadNewPageState.filteredBooks
-				// 		: loadNewPageState.books;
 				nextBooks = loadNewPageState.books.slice(
 					lowerCount - perPage,
 					upperCount - perPage

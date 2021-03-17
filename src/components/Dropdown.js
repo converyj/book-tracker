@@ -18,53 +18,29 @@ export default function Dropdown({ query, setTitle }) {
 		setSelected
 	] = useState({});
 
-	/* updates the list of books whenever query changes only with book's that have authors are are not duplicates*/
+	/* updates the list of books whenever query changes only if component is mounted (dropdown is showing only if query is not empty)*/
 	useEffect(
 		() => {
-			if (query.length > 0) {
-				const search = () =>
-					searchBook(query).then((allBooks) => {
-						console.log(allBooks);
-						const filteredArr = allBooks.reduce((acc, current) => {
-							const x = acc.find((item) => {
-								if (!item) return;
-								return item.id === current.id;
-							});
-							console.log(x);
-							if (!x) {
-								return acc.concat(current);
-							}
-							else {
-								return acc;
-							}
-						}, []);
-						setBooks(filteredArr);
+			let mounted = true;
+			const search = () =>
+				searchBook(query).then((allBooks) => {
+					console.log(allBooks);
+					const filteredArr = allBooks.filter((book) => {
+						return (
+							book.volumeInfo.hasOwnProperty('authors') &&
+							book.volumeInfo.hasOwnProperty('imageLinks')
+						);
 					});
+					if (mounted) setBooks(filteredArr);
+				});
 
-				search();
-			}
+			search();
+			return () => (mounted = false);
 		},
 		[
 			query
 		]
 	);
-
-	// /* updates the list of books whenever query changes */
-	// useEffect(
-	// 	(books) => {
-
-	// 				const books = books.filter((book) =>
-	// 					console.log(book.volumeInfo.hasOwnProperty('author'))
-	// 				);
-
-	// 				setBooks(books);
-	// 			});
-
-	// 	},
-	// 	[
-	// 		books
-	// 	]
-	// );
 
 	/* Callback function to set the selected book that was clicked on from the list of books */
 	const handleBook = useCallback(
@@ -111,7 +87,7 @@ export default function Dropdown({ query, setTitle }) {
 								<p className="search-book-list__item-title">
 									{trancateTitle(book.volumeInfo.title)}
 								</p>
-								{/* <p>{book.volumeInfo.authors.join(', ')}</p> */}
+								<p>{book.volumeInfo.authors.join(', ')}</p>
 							</div>
 						</li>
 					))}

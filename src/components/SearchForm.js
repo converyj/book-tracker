@@ -28,8 +28,13 @@ class SearchForm extends Component {
 		});
 	};
 
-	/* show the dropdown to display list of books when title changes  */
+	/* show the dropdown to display list of books when title changes and ? */
 	componentDidUpdate(_, prevState) {
+		console.log(
+			this.state.title !== prevState.title,
+			prevState.showDropdown,
+			this.state.showDropdown
+		);
 		if (
 			this.state.title !== prevState.title &&
 			this.state.showDropdown === prevState.showDropdown
@@ -85,8 +90,9 @@ class SearchForm extends Component {
 								onChange={this.handleInputChange}
 							/>
 						</div>
-
-						{showDropdown && <Dropdown query={title} setTitle={this.handleTitle} />}
+						{/* show dropdown if title value is not empty and user has not chosen a book */}
+						{showDropdown &&
+						title.length > 0 && <Dropdown query={title} setTitle={this.handleTitle} />}
 					</div>
 
 					<DatePicker handleDate={this.setDate} />

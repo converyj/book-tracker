@@ -10,55 +10,43 @@ import Pagination from './Pagination';
  */
 class BookList extends Component {
 	componentDidUpdate(prevProps, _) {
-		// if changed page and there is filters, refresh the books to apply the filter
+		// if changed page and there are filters, refresh the books to apply the filter - can only be one
 		if (
 			prevProps.books.currentPage !== this.props.books.currentPage &&
 			this.props.books.appliedFilters.length > 0
 		) {
-			console.log('filter');
-			const filters = this.props.books.appliedFilters;
-			filters.forEach((filter) => {
-				switch (filter) {
-					case 'SORT_BY_DATE':
-						this.props.sortByDate();
-						break;
+			const filter = this.props.books.appliedFilters[0];
+			switch (filter) {
+				case 'SORT_BY_DATE':
+					this.props.sortByDate();
+					break;
 
-					case 'SORT_BY_AUTHOR':
-						this.props.sortByAuthor();
-						break;
-
-					case 'FILTER_BY_VALUE':
-						this.props.filterByValue();
-						break;
-					default:
-						break;
-				}
-			});
+				case 'SORT_BY_AUTHOR':
+					this.props.sortByAuthor();
+					break;
+				default:
+					break;
+			}
 		}
-		// filter by value was applied but is not empty and there are still filters, refresh the book list to apply the filter
-		console.log(prevProps.books.appliedFilters);
-		// if (
-		// 	prevProps.books.appliedFilters !== this.props.books.appliedFilters &&
-		// 	this.props.books.appliedFilters.length > 0
-		// ) {
-		// 	console.log('filter gone');
-		// 	let flag = false;
-		// 	const filter = this.props.books.appliedFilters[0];
-		// 	console.log(filter);
-		// 	switch (filter) {
-		// 		case 'SORT_BY_DATE':
-		// 			this.props.sortByDate();
-		// 			break;
+		// if filter by value was applied but is now not applied and there are still filters, refresh the book list to apply the filter - can only be one
+		if (
+			prevProps.books.appliedFilters.includes('FILTER_BY_VALUE') &&
+			!this.props.books.appliedFilters.includes('FILTER_BY_VALUE') &&
+			this.props.books.appliedFilters.length > 0
+		) {
+			const filter = this.props.books.appliedFilters[0];
+			switch (filter) {
+				case 'SORT_BY_DATE':
+					this.props.sortByDate();
+					break;
 
-		// 		case 'SORT_BY_AUTHOR':
-		// 			this.props.sortByAuthor();
-		// 			flag = true;
-		// 			break;
-		// 		default:
-		// 			break;
-		// 	}
-		// 	flag = false;
-		// }
+				case 'SORT_BY_AUTHOR':
+					this.props.sortByAuthor();
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 	render() {
@@ -68,7 +56,7 @@ class BookList extends Component {
 			<Fragment>
 				{filteredPages > 0 && <Pagination />}
 				<div className="books-grid">
-					{filteredBooks && filteredBooks.length > 0 ? (
+					{filteredBooks != null && filteredBooks.length > 0 ? (
 						filteredBooks.map((book) => <Book key={book.id} book={book} />)
 					) : (
 						<h1>No Books</h1>

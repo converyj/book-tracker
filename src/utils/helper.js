@@ -41,20 +41,27 @@ export function formatBook(book) {
 }
 
 export const addFilterIfNotExist = (filter, appliedFilters) => {
-	let index = appliedFilters.indexOf(filter);
+	let copyAppliedFilters = [
+		...appliedFilters
+	];
+
+	let index = copyAppliedFilters.indexOf(filter);
 	if (index === -1) {
-		appliedFilters.push(filter);
+		copyAppliedFilters.push(filter);
 	}
 
-	return appliedFilters;
+	return copyAppliedFilters;
 };
 
 export const removeFilterIfExist = (filter, appliedFilters) => {
-	let index = appliedFilters.indexOf(filter);
+	let copyAppliedFilters = [
+		...appliedFilters
+	];
+	let index = copyAppliedFilters.indexOf(filter);
 	console.log(index);
 	if (index >= 0) {
-		appliedFilters.splice(index, 1);
+		copyAppliedFilters.splice(index, 1);
 	}
 
-	return appliedFilters;
+	return copyAppliedFilters;
 };

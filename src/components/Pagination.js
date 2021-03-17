@@ -46,9 +46,9 @@ class Pagination extends Component {
 						{/* creates a new array with a length defined by filteredPages */}
 						{[
 							...Array(filteredPages)
-						].map((value, index) => (
+						].map((_, index) => (
 							<button
-								key={value}
+								key={index}
 								className={`btn ${currentPage === index + 1 && 'is-current'}`}
 								onClick={() => this.goToPage(index + 1)}>
 								{index + 1}

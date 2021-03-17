@@ -13,7 +13,7 @@ import {
 import SearchBtn from '../components/SearchBtn';
 
 class Home extends Component {
-	componentWillMount() {
+	componentDidMount() {
 		console.log('Home mounted');
 		this.props.handleInitialData();
 	}
