@@ -1,6 +1,6 @@
 import firebase from '../firebase';
 
-// callback as a Promise
+// get snapshot of all books as a Promise
 const getData = (ref) => {
 	return new Promise((res, rej) => {
 		const onError = (error) => rej(error);
