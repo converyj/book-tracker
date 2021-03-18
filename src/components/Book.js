@@ -50,7 +50,7 @@ const Book = ({ book }) => {
 				<p className="book-authors">
 					{book.authors ? book.authors.join(', ') : 'No Author'}
 				</p>
-				<DisplayRating book={book} />
+				<DisplayRating book={book} disabled={true} />
 				<div className="book-info">
 					<div className="date-read">
 						Read on <strong>{formatDate(book.date)}</strong>

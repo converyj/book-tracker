@@ -38,6 +38,10 @@
 	margin-top: .5em;
 }
 
+.book-info > * {
+	margin-top: 0.5em;
+}
+
 .comment {
 	cursor: pointer;
 }

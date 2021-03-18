@@ -10,7 +10,7 @@ import Pagination from './Pagination';
  */
 class BookList extends Component {
 	componentDidUpdate(prevProps, _) {
-		// if changed page and there are filters, refresh the books to apply the filter - can only be one
+		// if page is changed and there are filters, refresh the books to apply the filter - can only be one
 		if (
 			prevProps.books.currentPage !== this.props.books.currentPage &&
 			this.props.books.appliedFilters.length > 0
@@ -56,8 +56,8 @@ class BookList extends Component {
 			<Fragment>
 				{filteredPages > 0 && <Pagination />}
 				<div className="books-grid">
-					{filteredBooks != null && filteredBooks.length > 0 ? (
-						filteredBooks.map((book) => <Book key={book.id} book={book} />)
+					{filteredBooks !== null && filteredBooks.length > 0 ? (
+						filteredBooks.map((book, index) => <Book key={index} book={book} />)
 					) : (
 						<h1>No Books</h1>
 					)}

@@ -28,19 +28,22 @@ class SearchForm extends Component {
 		});
 	};
 
-	/* show the dropdown to display list of books when title changes and ? */
-	componentDidUpdate(_, prevState) {
-		console.log(
-			this.state.title !== prevState.title,
-			prevState.showDropdown,
-			this.state.showDropdown
-		);
+	/* real check is to show the dropdown to display list of books when title changes and still showing the dropdown (keeps it from not updated at every render)
+	- need it to make the Dropdown Component render the first time  
+	   - this.state.showDropdown will always be true after first time showing the dropdown which is responsibe for displaying the dropdown 
+	   - prevProps.showDropdown will only be false at first update which will cause componentDidUpdate not to run */
+	componentDidUpdate(prevProps, prevState) {
 		if (
 			this.state.title !== prevState.title &&
 			this.state.showDropdown === prevState.showDropdown
 		) {
 			console.log('updated');
 			this.setState({ showDropdown: true });
+		}
+
+		// redirect if finished adding book to state
+		if (prevProps.loading.default !== 0) {
+			this.props.history.push('/');
 		}
 	}
 
@@ -119,12 +122,21 @@ class SearchForm extends Component {
 						<AddRating setRate={this.setRate} rate={rate} />
 					</div>
 				</form>
-				<Link to="/" className="btn btn--form" type="button" onClick={this.handleAdd}>
+				<a className="btn btn--form" type="button" onClick={this.handleAdd}>
 					ADD
-				</Link>
+				</a>
 			</div>
 		);
 	}
 }
 
-export default withRouter(connect(null, { handleAddBook })(SearchForm));
+export default withRouter(
+	connect(
+		({ loadingBar }) => {
+			return {
+				loading: loadingBar
+			};
+		},
+		{ handleAddBook }
+	)(SearchForm)
+);

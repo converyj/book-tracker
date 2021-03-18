@@ -1,15 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import Header from './../components/Header';
 import { connect } from 'react-redux';
-import { getBooksLS } from '../utils/api';
 import BookList from '../components/BookList';
-import {
-	recieveBooks,
-	filterByValue,
-	sortByAuthor,
-	sortByDate,
-	handleInitialData
-} from '../actions/books';
+import { filterByValue, sortByAuthor, sortByDate, handleInitialData } from '../actions/books';
 import SearchBtn from '../components/SearchBtn';
 
 class Home extends Component {

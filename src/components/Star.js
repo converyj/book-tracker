@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import fullStar from '../icons/full-star.png';
-import halfStar from '../icons/half-star.png';
-import emptyStar from '../icons/empty-star.png';
+import fullStar from '../icons/full-star.svg';
+import emptyStar from '../icons/empty-star.svg';
 import './star.css';
 
 /**
@@ -20,15 +19,10 @@ const Star = ({ value, onClick }) => {
 	 */
 	const getStars = () => {
 		let stars = [];
-		let halfDone = false;
 
 		for (let i = 1; i <= 5; i++) {
 			if (i <= value) {
 				stars.push('fs');
-			}
-			else if (i > value && value % 1 !== 0 && !halfDone) {
-				stars.push('hs');
-				halfDone = true;
 			}
 			else {
 				stars.push('es');
@@ -41,11 +35,11 @@ const Star = ({ value, onClick }) => {
 			{
 				(stars = getStars().map((star, index) => {
 					if (star === 'fs') src = fullStar;
-					else if (star === 'hs') src = halfStar;
 					else src = emptyStar;
 
 					return (
 						<img
+							style={onClick && { cursor: 'pointer' }}
 							key={index}
 							value={index}
 							src={src}

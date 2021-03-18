@@ -1,4 +1,3 @@
-import { computeHeadingLevel } from '@testing-library/dom';
 import {
 	RECIEVE_BOOKS,
 	LOAD_NEW_PAGE,
@@ -180,13 +179,18 @@ export default function books(state = {}, action) {
 		case SORT_BY_DATE:
 			let newSortByDateState = Object.assign({}, state);
 
-			let sortByDate = state.filteredBooks.sort((a, b) => {
+			// sort on all books and not just filtered books
+			let sortByDate = newSortByDateState.books.sort((a, b) => {
 				return b.date > a.date ? 1 : a.date > b.date ? -1 : 0;
 			});
 
 			console.log(newSortByDateState);
 
-			newSortByDateState.filteredBooks = sortByDate;
+			// only show 20 books per page
+			newSortByDateState.filteredBooks = sortByDate.slice(
+				newSortByDateState.currentPage === 1 ? 0 : newSortByDateState.countPerPage,
+				newSortByDateState.currentCount
+			);
 			// delete the sortByAuthor filter
 			newSortByDateState.appliedFilters = removeFilterIfExist(
 				SORT_BY_AUTHOR,
@@ -203,12 +207,18 @@ export default function books(state = {}, action) {
 		case SORT_BY_AUTHOR:
 			console.log(state);
 			let newSortByAuthorState = Object.assign({}, state);
-			let sortByAuthor = state.filteredBooks.sort((a, b) => {
+			// sort on all books and not just the filtered books
+			let sortByAuthor = newSortByAuthorState.books.sort((a, b) => {
 				return a.authors - b.authors ? 1 : b.authors > a.authors ? -1 : 0;
 			});
 
 			console.log(sortByAuthor);
-			newSortByAuthorState.filteredBooks = sortByAuthor;
+			// only show 20 books per page
+			newSortByAuthorState.filteredBooks = sortByAuthor.slice(
+				newSortByAuthorState.currentPage === 1 ? 0 : newSortByAuthorState.countPerPage,
+				newSortByAuthorState.currentCount
+			);
+
 			// delete the sortByDate filter
 			newSortByAuthorState.appliedFilters = removeFilterIfExist(
 				SORT_BY_DATE,

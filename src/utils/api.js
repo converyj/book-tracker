@@ -34,7 +34,7 @@ https://firebase.google.com/docs/database/web/read-and-write#basic_write
 */
 export const saveBook = (book) => {
 	// generate new key and set book
-	firebase.database().ref('books').push().set(book);
+	return new Promise((res, rej) => res(firebase.database().ref('books').push().set(book)));
 };
 
 /* update book comment to Firebase 
@@ -60,19 +60,4 @@ export const updateComment = (id, comment) => {
 				});
 			}
 		});
-};
-export const saveBooksLS = (book) => {
-	const books = [];
-	books.push(book);
-	let bookList = JSON.parse(localStorage.getItem('books'));
-	// if bookList already exist
-	if (bookList) {
-		console.log('exist');
-		bookList.push(book);
-		localStorage.setItem('books', JSON.stringify(bookList));
-	}
-	else {
-		// if bookList does not exist
-		localStorage.setItem('books', JSON.stringify(books));
-	}
 };

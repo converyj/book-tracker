@@ -76,22 +76,12 @@ export const loadExactPage = (payload) => {
 /* add book */
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
-	console.log(formattedBook);
-	return (dispatch, getState) => {
-		const { books } = getState().books;
-		console.log(books);
-		if (
-			!Object.values(books).forEach(
-				(book) =>
-					book.id &&
-					book.volumeInfo.authors[0] !== formattedBook.id &&
-					formattedBook.authors[0]
-			)
-		) {
-			saveBook(formattedBook);
+	return (dispatch) => {
+		dispatch(showLoading());
+		saveBook(formattedBook).then(() => {
 			dispatch(addBook(formattedBook));
-		}
-		else console.log('Duplicate');
+			dispatch(hideLoading());
+		});
 	};
 }
 
@@ -109,6 +99,10 @@ export function handleInitialData() {
 /* update book comment */
 export const handleBookComment = (id, comment) => {
 	return (dispatch) => {
-		updateComment(id, comment).then(() => dispatch(updateBookComment(id, comment)));
+		dispatch(showLoading());
+		updateComment(id, comment).then(() => {
+			dispatch(updateBookComment(id, comment));
+			dispatch(hideLoading());
+		});
 	};
 };
