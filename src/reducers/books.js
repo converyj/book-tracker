@@ -13,8 +13,11 @@ import { addFilterIfNotExist, removeFilterIfExist } from '../utils/helper';
 export default function books(state = {}, action) {
 	switch (action.type) {
 		case RECIEVE_BOOKS:
-			let totalBooks = Object.values(action.books).length;
+			if (action.books === null) {
+				action.books = [];
+			}
 			const { books } = action;
+			let totalBooks = Object.values(action.books).length;
 			let countPerPage = action.countPerPage || 20;
 
 			// Need the total number of pages. This is used in rendering the pagination component: round up pages

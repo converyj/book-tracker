@@ -56,7 +56,7 @@ class BookList extends Component {
 			<Fragment>
 				{filteredPages > 0 && <Pagination />}
 				<div className="books-grid">
-					{filteredBooks !== null && filteredBooks.length > 0 ? (
+					{filteredBooks && filteredBooks !== null && filteredBooks.length > 0 ? (
 						filteredBooks.map((book, index) => <Book key={index} book={book} />)
 					) : (
 						<h1>No Books</h1>

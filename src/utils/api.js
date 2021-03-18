@@ -1,5 +1,11 @@
 import firebase from '../firebase';
 
+// Generate a unique token for storing user books data on the backend server.
+let userID = localStorage.userID;
+if (!userID) userID = localStorage.userID = Math.random().toString(36).substr(-8);
+
+const booksRef = firebase.database().ref('users/' + userID + '/books/');
+
 // get snapshot of all books as a Promise
 const getData = (ref) => {
 	return new Promise((res, rej) => {
@@ -12,7 +18,6 @@ const getData = (ref) => {
 
 /* get books from Firebase and return null or books object */
 export const getBooks = () => {
-	const booksRef = firebase.database().ref('books');
 	// consume the promise of getData()
 	const books = getData(booksRef)
 		.then((value) => {
@@ -34,7 +39,7 @@ https://firebase.google.com/docs/database/web/read-and-write#basic_write
 */
 export const saveBook = (book) => {
 	// generate new key and set book
-	return new Promise((res, rej) => res(firebase.database().ref('books').push().set(book)));
+	return new Promise((res, rej) => res(booksRef.push().set(book)));
 };
 
 /* update book comment to Firebase 
@@ -55,7 +60,7 @@ export const updateComment = (id, comment) => {
 				// update the comment field of book
 				return new Promise((res, rej) => {
 					var updates = {};
-					updates['/books/' + key + '/comment/'] = comment;
+					updates['/users/' + userID + '/books/' + key + '/comment/'] = comment;
 					return res(firebase.database().ref().update(updates));
 				});
 			}
