@@ -4,6 +4,10 @@ import { loadNewPage, loadExactPage } from './../actions/books';
 import { withRouter } from 'react-router-dom';
 import './pagination.css';
 
+/**
+ * @description Responsible for handling the different pages
+ */
+
 class Pagination extends Component {
 	// go to next page
 	nextPage = () => {
@@ -21,8 +25,7 @@ class Pagination extends Component {
 	};
 
 	render() {
-		const { filteredPages, filteredBooks, currentPage, totalPages } = this.props;
-		console.log(currentPage, totalPages);
+		const { filteredPages, currentPage, totalPages } = this.props;
 		return (
 			<section className="pagination">
 				<nav className="pagination-nav">

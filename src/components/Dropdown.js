@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './dropdown.css';
 import { trancateTitle } from './../utils/helper';
 import { searchBook } from '../utils/api';
@@ -24,7 +24,6 @@ export default function Dropdown({ query, setTitle }) {
 			let mounted = true;
 			const search = () =>
 				searchBook(query).then((allBooks) => {
-					console.log(allBooks);
 					const filteredArr = allBooks.filter((book) => {
 						return (
 							book.volumeInfo.hasOwnProperty('authors') &&

@@ -7,7 +7,6 @@ import SearchBtn from '../components/SearchBtn';
 
 class Home extends Component {
 	componentDidMount() {
-		console.log('Home mounted');
 		this.props.handleInitialData();
 	}
 
@@ -20,19 +19,15 @@ class Home extends Component {
 	/* handle the sorting of books based on author or date */
 	handleSortedList = (e) => {
 		let sortBy = e.target.value;
-		console.log(sortBy);
 		if (sortBy === 'By Author') {
-			console.log('author');
 			this.props.sortByAuthor();
 		}
 		else if (sortBy === 'By Date') {
-			console.log('ele');
 			this.props.sortByDate();
 		}
 	};
 
 	render() {
-		console.log('Home render');
 		return (
 			<div>
 				<Header

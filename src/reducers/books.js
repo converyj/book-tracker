@@ -47,7 +47,6 @@ export default function books(state = {}, action) {
 		case LOAD_NEW_PAGE:
 			// clone the state
 			let loadNewPageState = { ...state };
-			console.log(loadNewPageState);
 			// how many pages should be added. Will always be 1 or -1
 			let addPages = action.payload.page;
 			// add it to the current page
@@ -65,11 +64,9 @@ export default function books(state = {}, action) {
 				let upperCount = loadNewPageState.currentCount + perPage;
 				// get the previous number of books shown: will be 20 (page 2)
 				let lowerCount = loadNewPageState.currentCount;
-				console.log(lowerCount, upperCount);
 				/* 2. Update the current number of books shown 
 				- change the currentCount to match the 'upperCount'. It'll be used as such at any point after this line
 				*/
-
 				loadNewPageState.currentCount += loadNewPageState.countPerPage;
 
 				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
@@ -104,20 +101,15 @@ export default function books(state = {}, action) {
 
 		case LOAD_EXACT_PAGE:
 			const exactPageState = { ...state };
-			console.log(exactPageState);
 			// the page number
 			const exactPage = action.payload.page;
-			console.log(exactPage);
 			// 1. get the number of books seen so far eg 20 * 2 = 40 books
 			let upperCountExact = exactPageState.countPerPage * exactPage;
-			console.log(upperCountExact);
 			// get the previous number of books shown
 			let lowerCountExact = upperCountExact - exactPageState.countPerPage;
-			console.log(lowerCountExact);
 
 			// 2. retrieve next books eg. within the 40-60 range (page 3)
 			let exactBooks = exactPageState.books.slice(lowerCountExact, upperCountExact);
-			console.log(exactBooks);
 			// update filtered books
 			exactPageState.filteredBooks = exactBooks;
 			// update the current books shown and current page
@@ -146,8 +138,6 @@ export default function books(state = {}, action) {
 				const filteredValues = state.books.filter((book) => {
 					return book.title.toLowerCase().includes(value);
 				});
-				console.log('value no empty');
-				console.log(filteredValues);
 				// add the sortByValue filter if doesn't exist
 				newState.appliedFilters = addFilterIfNotExist(
 					FILTER_BY_VALUE,
@@ -161,7 +151,6 @@ export default function books(state = {}, action) {
 				newState.filteredPages = Math.ceil(newState.filteredCount / newState.countPerPage);
 			}
 			else {
-				console.log('else');
 				//if the value is empty, we can assume everything has been erased
 				//in that case, remove the current filter
 				newState.appliedFilters = removeFilterIfExist(
@@ -187,8 +176,6 @@ export default function books(state = {}, action) {
 				return b.date > a.date ? 1 : a.date > b.date ? -1 : 0;
 			});
 
-			console.log(newSortByDateState);
-
 			// only show 20 books per page
 			newSortByDateState.filteredBooks = sortByDate.slice(
 				newSortByDateState.currentPage === 1 ? 0 : newSortByDateState.countPerPage,
@@ -204,18 +191,14 @@ export default function books(state = {}, action) {
 				SORT_BY_DATE,
 				newSortByDateState.appliedFilters
 			);
-
-			console.log(newSortByDateState, state);
 			return newSortByDateState;
 		case SORT_BY_AUTHOR:
-			console.log(state);
 			let newSortByAuthorState = Object.assign({}, state);
 			// sort on all books and not just the filtered books
 			let sortByAuthor = newSortByAuthorState.books.sort((a, b) => {
 				return a.authors - b.authors ? 1 : b.authors > a.authors ? -1 : 0;
 			});
 
-			console.log(sortByAuthor);
 			// only show 20 books per page
 			newSortByAuthorState.filteredBooks = sortByAuthor.slice(
 				newSortByAuthorState.currentPage === 1 ? 0 : newSortByAuthorState.countPerPage,

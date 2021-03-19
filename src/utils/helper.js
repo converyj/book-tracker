@@ -58,7 +58,6 @@ export const removeFilterIfExist = (filter, appliedFilters) => {
 		...appliedFilters
 	];
 	let index = copyAppliedFilters.indexOf(filter);
-	console.log(index);
 	if (index >= 0) {
 		copyAppliedFilters.splice(index, 1);
 	}

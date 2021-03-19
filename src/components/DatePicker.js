@@ -7,7 +7,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import { PropTypes } from 'prop-types';
 
 /**
- * @description Responsible for allowing user to choose date they read book 
+ * @description Material UI Component responsible for allowing user to choose date they read book 
  */
 
 export default function DatePicker({ handleDate }) {

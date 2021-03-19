@@ -17,21 +17,10 @@ const Book = ({ book }) => {
 		setShowComment
 	] = useState(false);
 
-	useEffect(
-		() => {
-			// update the showComment state when book object changes: when comment is updated
-			setShowComment(false);
-		},
-		[
-			book
-		]
-	);
-
 	// toggle showing the comment field
-	const handleShowComment = (show = !showComment) => {
+	const handleShowComment = () => {
 		setShowComment(!showComment);
 	};
-	console.log(showComment);
 	return (
 		<li>
 			<div className="book">

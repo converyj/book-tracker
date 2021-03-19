@@ -49,7 +49,7 @@ export const updateComment = (id, comment) => {
 	// get the key of the book
 	return firebase
 		.database()
-		.ref('books')
+		.ref(booksRef)
 		.orderByChild('id')
 		.equalTo(id)
 		.once('value')

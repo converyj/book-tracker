@@ -29,7 +29,7 @@ class SearchForm extends Component {
 	};
 
 	/* real check is to show the dropdown to display list of books when title changes and still showing the dropdown (keeps it from not updated at every render)
-	- need it to make the Dropdown Component render the first time  
+	- need it to make the Dropdown Component render when title changes 
 	   - this.state.showDropdown will always be true after first time showing the dropdown which is responsibe for displaying the dropdown 
 	   - prevProps.showDropdown will only be false at first update which will cause componentDidUpdate not to run */
 	componentDidUpdate(prevProps, prevState) {
@@ -37,7 +37,6 @@ class SearchForm extends Component {
 			this.state.title !== prevState.title &&
 			this.state.showDropdown === prevState.showDropdown
 		) {
-			console.log('updated');
 			this.setState({ showDropdown: true });
 		}
 
@@ -59,7 +58,6 @@ class SearchForm extends Component {
 
 	/* add book */
 	handleAdd = () => {
-		console.log(this.props);
 		const { book, date, comment, isLibraryBook, rate } = this.state;
 		this.props.handleAddBook({ ...book, date, comment, isLibraryBook, rate });
 	};
@@ -73,7 +71,6 @@ class SearchForm extends Component {
 		const target = e.target;
 		const value = target.type === 'checkbox' ? target.checked : target.value;
 		const name = target.name;
-		console.log(value, name);
 		this.setState({ [name]: value });
 	};
 

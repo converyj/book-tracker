@@ -51,7 +51,6 @@ class BookList extends Component {
 
 	render() {
 		const { filteredBooks, filteredPages } = this.props.books;
-		console.log(filteredBooks);
 		return (
 			<Fragment>
 				{filteredPages > 0 && <Pagination />}
