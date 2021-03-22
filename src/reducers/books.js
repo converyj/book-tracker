@@ -136,7 +136,7 @@ export default function books(state = {}, action) {
 			//if the value from the input box is not empty
 			if (value) {
 				const filteredValues = state.books.filter((book) => {
-					return book.title.toLowerCase().includes(value);
+					return book.title.toLowerCase().includes(value.toLowerCase());
 				});
 				// add the sortByValue filter if doesn't exist
 				newState.appliedFilters = addFilterIfNotExist(
