@@ -77,6 +77,7 @@ export const loadExactPage = (payload) => {
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
 	return (dispatch) => {
+		alert('You are about to add book that exists in your book list');
 		dispatch(showLoading());
 		saveBook(formattedBook).then(() => {
 			dispatch(addBook(formattedBook));
