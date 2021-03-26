@@ -61,6 +61,7 @@ class BookList extends Component {
 						<h1>No Books</h1>
 					)}
 				</div>
+				{filteredPages > 0 && <Pagination />}
 			</Fragment>
 		);
 	}

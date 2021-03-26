@@ -34,7 +34,7 @@ class Pagination extends Component {
 							className="btn pagination-previous"
 							onClick={this.previousPage}
 							disabled={currentPage <= 1 ? true : false}>
-							Previous
+							Previous Page
 						</button>
 						<button
 							className="btn pagination-next"
