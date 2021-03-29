@@ -76,8 +76,25 @@ export const loadExactPage = (payload) => {
 /* add book */
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
-	return (dispatch) => {
-		alert('You are about to add book that exists in your book list');
+	return (dispatch, getState) => {
+		const { books } = getState().books;
+		// book already exists
+		const bookAlreadyExists = books.some(
+			(book) =>
+				book.authors[0] === formattedBook.authors[0] && book.title === formattedBook.title
+		);
+
+		// confirm if user wants to still add the existing book
+		if (bookAlreadyExists) {
+			const add = window.confirm(
+				'You are about to add a book that is already in your list. Do you still want to add this book?'
+			);
+
+			if (!add) {
+				return;
+			}
+		}
+		// only add book if user confirms or is new book
 		dispatch(showLoading());
 		saveBook(formattedBook).then(() => {
 			dispatch(addBook(formattedBook));
