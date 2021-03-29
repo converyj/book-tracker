@@ -42,6 +42,7 @@ class SearchForm extends Component {
 
 		// redirect if finished adding book to state
 		if (prevProps.loading.default !== 0) {
+			console.log(prevProps.location);
 			this.props.history.push('/');
 		}
 	}
@@ -78,6 +79,9 @@ class SearchForm extends Component {
 		const { title, comment, isLibraryBook, rate, showDropdown } = this.state;
 		return (
 			<div className="search-grid">
+				<Link to="/" className="btn btn--form" type="button">
+					Go Back
+				</Link>
 				<form action="">
 					<div className="form-title">
 						<div className="form-group">
