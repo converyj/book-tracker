@@ -66,3 +66,24 @@ export const updateComment = (id, comment) => {
 			}
 		});
 };
+
+export const removeBook = (id) => {
+	// get the key of the book
+	return firebase
+		.database()
+		.ref(booksRef)
+		.orderByChild('id')
+		.equalTo(id)
+		.once('value')
+		.then((snapshot) => {
+			let value = snapshot.val();
+			if (value) {
+				var key = Object.keys(value)[0];
+				console.log(key);
+				// update the comment field of book
+				return new Promise((res, rej) => {
+					res(booksRef.child(key).remove());
+				});
+			}
+		});
+};

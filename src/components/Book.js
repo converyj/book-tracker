@@ -6,11 +6,20 @@ import DisplayRating from './DisplayRating';
 import './book.css';
 import { formatDate } from './../utils/helper';
 import CommentField from './CommentField';
+import MoreBtn from './MoreBtn';
 
 /**
  * @description Displays a book and the user's own rating 
  */
-const Book = ({ book }) => {
+const Book = ({ book, deleteBook }) => {
+	useEffect(
+		() => {
+			console.log('BOOK updated');
+		},
+		[
+			book
+		]
+	);
 	// whether to show the comment field
 	const [
 		showComment,
@@ -33,6 +42,7 @@ const Book = ({ book }) => {
 							backgroundImage: `url(${book.image ? book.image : ''})`
 						}}
 					/>
+					<MoreBtn deleteBook={deleteBook} id={book.id} />
 				</div>
 
 				<h4 className="book-title">{book.title}</h4>

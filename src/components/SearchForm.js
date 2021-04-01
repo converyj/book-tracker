@@ -42,6 +42,7 @@ class SearchForm extends Component {
 
 		// redirect if finished adding book to state
 		if (prevProps.loading.default !== 0) {
+			console.log(prevProps.loading.default);
 			this.props.history.push('/');
 		}
 	}

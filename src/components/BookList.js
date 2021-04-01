@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { sortByAuthor, sortByDate, filterByValue } from './../actions/books';
+import { sortByAuthor, sortByDate, filterByValue, handleDelete } from './../actions/books';
 import { connect } from 'react-redux';
 import Book from './../components/Book';
 import './bookList.css';
@@ -10,6 +10,7 @@ import Pagination from './Pagination';
  */
 class BookList extends Component {
 	componentDidUpdate(prevProps, _) {
+		console.log('BOOKLIST update');
 		// if page is changed and there are filters, refresh the books to apply the filter - can only be one
 		if (
 			prevProps.books.currentPage !== this.props.books.currentPage &&
@@ -49,6 +50,10 @@ class BookList extends Component {
 		}
 	}
 
+	// shouldComponentUpdate(nextProps, _) {
+	// 	return nextProps.books.books.length === this.props.books.books.length;
+	// }
+
 	render() {
 		const { filteredBooks, filteredPages } = this.props.books;
 		return (
@@ -56,7 +61,9 @@ class BookList extends Component {
 				{filteredPages > 0 && <Pagination />}
 				<div className="books-grid">
 					{filteredBooks && filteredBooks !== null && filteredBooks.length > 0 ? (
-						filteredBooks.map((book, index) => <Book key={index} book={book} />)
+						filteredBooks.map((book, index) => (
+							<Book key={index} book={book} deleteBook={this.props.handleDelete} />
+						))
 					) : (
 						<h1>No Books</h1>
 					)}
@@ -74,5 +81,5 @@ export default connect(
 			loading: loadingBar
 		};
 	},
-	{ sortByAuthor, sortByDate, filterByValue }
+	{ sortByAuthor, sortByDate, filterByValue, handleDelete }
 )(BookList);

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import BookList from '../components/BookList';
 import { filterByValue, sortByAuthor, sortByDate, handleInitialData } from '../actions/books';
 import SearchBtn from '../components/SearchBtn';
+import Pagination from '../components/Pagination';
 
 class Home extends Component {
 	componentDidMount() {

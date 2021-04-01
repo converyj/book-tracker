@@ -7,12 +7,13 @@ Sort Books
 
 import { hideLoading, showLoading } from 'react-redux-loading';
 import { formatBook } from '../utils/helper';
-import { saveBooksLS, getBooks, updateComment, saveBook } from './../utils/api';
+import { getBooks, updateComment, saveBook, removeBook } from './../utils/api';
 
 export const LOAD_NEW_PAGE = 'LOAD_NEW_PAGE';
 export const LOAD_EXACT_PAGE = 'LOAD_EXACT_PAGE';
 export const RECIEVE_BOOKS = 'RECIEVE_BOOKS';
 export const ADD_BOOK = 'ADD_BOOK';
+export const DELETE_BOOK = 'DELETE_BOOK';
 export const FILTER_BY_VALUE = 'FILTER_BY_VALUE';
 export const SORT_BY_AUTHOR = 'SORT_BY_AUTHOR';
 export const SORT_BY_DATE = 'SORT_BY_DATE';
@@ -29,6 +30,13 @@ export const addBook = (book) => {
 	return {
 		type: ADD_BOOK,
 		book
+	};
+};
+
+export const deleteBook = (id) => {
+	return {
+		type: DELETE_BOOK,
+		id
 	};
 };
 
@@ -81,7 +89,8 @@ export function handleAddBook(book) {
 		// book already exists
 		const bookAlreadyExists = books.some(
 			(book) =>
-				book.authors[0] === formattedBook.authors[0] && book.title === formattedBook.title
+				book.authors.includes(formattedBook.authors[0]) &&
+				book.title === formattedBook.title
 		);
 
 		// confirm if user wants to still add the existing book
@@ -96,7 +105,7 @@ export function handleAddBook(book) {
 		}
 		// only add book if user confirms or is new book
 		dispatch(showLoading());
-		saveBook(formattedBook).then(() => {
+		return saveBook(formattedBook).then(() => {
 			dispatch(addBook(formattedBook));
 			dispatch(hideLoading());
 		});
@@ -107,7 +116,7 @@ export function handleAddBook(book) {
 export function handleInitialData() {
 	return (dispatch) => {
 		dispatch(showLoading());
-		getBooks().then((books) => {
+		return getBooks().then((books) => {
 			dispatch(recieveBooks(books));
 			dispatch(hideLoading());
 		});
@@ -118,8 +127,18 @@ export function handleInitialData() {
 export const handleBookComment = (id, comment) => {
 	return (dispatch) => {
 		dispatch(showLoading());
-		updateComment(id, comment).then(() => {
+		return updateComment(id, comment).then(() => {
 			dispatch(updateBookComment(id, comment));
+			dispatch(hideLoading());
+		});
+	};
+};
+
+export const handleDelete = (id) => {
+	return (dispatch) => {
+		dispatch(showLoading());
+		return removeBook(id).then(() => {
+			dispatch(deleteBook(id));
 			dispatch(hideLoading());
 		});
 	};

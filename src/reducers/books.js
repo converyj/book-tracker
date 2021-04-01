@@ -6,6 +6,7 @@ import {
 	SORT_BY_AUTHOR,
 	SORT_BY_DATE,
 	ADD_BOOK,
+	DELETE_BOOK,
 	UPDATE_COMMENT
 } from '../actions/books';
 import { addFilterIfNotExist, removeFilterIfExist } from '../utils/helper';
@@ -221,17 +222,27 @@ export default function books(state = {}, action) {
 		case UPDATE_COMMENT:
 			let newUpdatedBooks = Object.assign({}, state);
 
-			const updatedElements = state.books.map((book) => {
+			const updatedBooks = newUpdatedBooks.books.map((book) => {
 				if (book.id == action.id) {
 					return { ...book, comment: action.comment };
 				}
 				return book;
 			});
-			newUpdatedBooks.books = updatedElements;
-			newUpdatedBooks.filteredBooks = updatedElements;
+			newUpdatedBooks.books = updatedBooks;
+			newUpdatedBooks.filteredBooks = updatedBooks;
 
 			return newUpdatedBooks;
 
+		case DELETE_BOOK:
+			const newBooksState = { ...state };
+
+			console.log(action.id);
+			const newBooks = newBooksState.books.filter((book) => book.id !== action.id);
+			console.log(newBooks);
+			newBooksState.books = newBooks;
+			newBooksState.filteredBooks = newBooks;
+
+			return newBooksState;
 		default:
 			return state;
 	}
