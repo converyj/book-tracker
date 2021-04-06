@@ -8,6 +8,7 @@ Sort Books
 import { hideLoading, showLoading } from 'react-redux-loading';
 import { formatBook } from '../utils/helper';
 import { saveBooksLS, getBooks, updateComment, saveBook } from './../utils/api';
+import { alertBox } from './../utils/helper';
 
 export const LOAD_NEW_PAGE = 'LOAD_NEW_PAGE';
 export const LOAD_EXACT_PAGE = 'LOAD_EXACT_PAGE';
@@ -76,12 +77,29 @@ export const loadExactPage = (payload) => {
 /* add book */
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
-	return (dispatch) => {
+	return (dispatch, getState) => {
+		const { books } = getState().books;
+		console.log(books.findIndex((book) => book === formattedBook));
+		const bookExists = books.findIndex(
+			(book) =>
+				book.authors.includes(formattedBook.authors[0]) &&
+				book.title === formattedBook.title
+		);
+
+		if (bookExists >= 0) {
+			alert('Cannot add book. Book already in your list. Try adding a different book.');
+
+			return new Promise((_, rej) => rej());
+		}
 		dispatch(showLoading());
-		saveBook(formattedBook).then(() => {
-			dispatch(addBook(formattedBook));
-			dispatch(hideLoading());
-		});
+		return saveBook(formattedBook)
+			.then(() => {
+				dispatch(addBook(formattedBook));
+			})
+			.then(() => dispatch(hideLoading()))
+			.catch((err) =>
+				alert('Error occurred while trying to add book. Try Again', err.message)
+			);
 	};
 }
 
@@ -89,10 +107,14 @@ export function handleAddBook(book) {
 export function handleInitialData() {
 	return (dispatch) => {
 		dispatch(showLoading());
-		getBooks().then((books) => {
-			dispatch(recieveBooks(books));
-			dispatch(hideLoading());
-		});
+		return getBooks()
+			.then((books) => {
+				dispatch(recieveBooks(books));
+			})
+			.then(() => dispatch(hideLoading()))
+			.catch((err) =>
+				alert('Error occurred while recieving your booklist. Try Again.', err.message)
+			);
 	};
 }
 
@@ -100,9 +122,13 @@ export function handleInitialData() {
 export const handleBookComment = (id, comment) => {
 	return (dispatch) => {
 		dispatch(showLoading());
-		updateComment(id, comment).then(() => {
-			dispatch(updateBookComment(id, comment));
-			dispatch(hideLoading());
-		});
+		updateComment(id, comment)
+			.then(() => {
+				dispatch(updateBookComment(id, comment));
+			})
+			.then(() => dispatch(hideLoading()))
+			.catch((err) =>
+				alert('Error occurred while trying to update comment. Try Again', err.message)
+			);
 	};
 };

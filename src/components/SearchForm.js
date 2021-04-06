@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import Dropdown from './Dropdown';
 import './searchForm.css';
 import { handleAddBook } from './../actions/books';
@@ -12,15 +12,21 @@ import { withRouter } from 'react-router-dom';
  * @description Save input field state and add book 
  */
 class SearchForm extends Component {
-	state = {
-		book: {},
-		title: '',
-		date: '',
-		comment: '',
-		rate: 0,
-		isLibraryBook: false,
-		showDropdown: false
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			book: {},
+			title: '',
+			date: '',
+			comment: '',
+			rate: 0,
+			isLibraryBook: false,
+			showDropdown: false
+		};
+
+		// perserve the initial state in a new object
+		this.baseState = this.state;
+	}
 
 	setDate = (date) => {
 		this.setState({
@@ -41,11 +47,17 @@ class SearchForm extends Component {
 		}
 
 		// redirect if finished adding book to state
-		if (prevProps.loading.default !== 0) {
-			console.log(prevProps.location);
-			this.props.history.push('/');
-		}
+		console.log(prevProps.loading.default, this.props.loading.default);
+
+		// if (prevProps.loading.default !== 0) {
+		// 	console.log(prevProps.loading.default, this.props.loading.default);
+		// 	this.props.history.push('/');
+		// }
 	}
+
+	resetForm = () => {
+		this.setState(this.baseState);
+	};
 
 	toggleLibraryBook = () => {
 		this.setState({ isLibraryBook: !this.state.isLibraryBook });
@@ -60,7 +72,10 @@ class SearchForm extends Component {
 	/* add book */
 	handleAdd = () => {
 		const { book, date, comment, isLibraryBook, rate } = this.state;
-		this.props.handleAddBook({ ...book, date, comment, isLibraryBook, rate });
+		this.props
+			.handleAddBook({ ...book, date, comment, isLibraryBook, rate })
+			.then(() => this.props.history.push('/'))
+			.catch(() => this.resetForm());
 	};
 
 	/* set the rate of book when user clicks on star */

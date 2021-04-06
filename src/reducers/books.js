@@ -9,6 +9,7 @@ import {
 	UPDATE_COMMENT
 } from '../actions/books';
 import { addFilterIfNotExist, removeFilterIfExist } from '../utils/helper';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 
 export default function books(state = {}, action) {
 	switch (action.type) {
@@ -46,7 +47,7 @@ export default function books(state = {}, action) {
 
 		case LOAD_NEW_PAGE:
 			// clone the state
-			let loadNewPageState = { ...state };
+			let loadNewPageState = cloneDeep(state);
 			// how many pages should be added. Will always be 1 or -1
 			let addPages = action.payload.page;
 			// add it to the current page
@@ -132,7 +133,7 @@ export default function books(state = {}, action) {
 		case FILTER_BY_VALUE:
 			const { value } = action;
 			// clone the state - do not motify initial state
-			let newState = Object.assign({}, state);
+			let newState = cloneDeep(state);
 			//if the value from the input box is not empty
 			if (value) {
 				const filteredValues = state.books.filter((book) => {
@@ -169,7 +170,7 @@ export default function books(state = {}, action) {
 
 			return newState;
 		case SORT_BY_DATE:
-			let newSortByDateState = Object.assign({}, state);
+			let newSortByDateState = cloneDeep(state);
 
 			// sort on all books and not just filtered books
 			let sortByDate = newSortByDateState.books.sort((a, b) => {
@@ -193,7 +194,7 @@ export default function books(state = {}, action) {
 			);
 			return newSortByDateState;
 		case SORT_BY_AUTHOR:
-			let newSortByAuthorState = Object.assign({}, state);
+			let newSortByAuthorState = cloneDeep(state);
 			// sort on all books and not just the filtered books
 			let sortByAuthor = newSortByAuthorState.books.sort((a, b) => {
 				return a.authors - b.authors ? 1 : b.authors > a.authors ? -1 : 0;
@@ -219,7 +220,7 @@ export default function books(state = {}, action) {
 			return newSortByAuthorState;
 
 		case UPDATE_COMMENT:
-			let newUpdatedBooks = Object.assign({}, state);
+			let newUpdatedBooks = cloneDeep(state);
 
 			const updatedElements = state.books.map((book) => {
 				if (book.id == action.id) {

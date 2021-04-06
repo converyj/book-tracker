@@ -7,7 +7,7 @@ import SearchBtn from '../components/SearchBtn';
 
 class Home extends Component {
 	componentDidMount() {
-		this.props.handleInitialData();
+		this.props.handleInitialData().then(() => console.log('ready'));
 	}
 
 	/* handle the filtering of books */

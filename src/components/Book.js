@@ -21,6 +21,7 @@ const Book = ({ book }) => {
 	const handleShowComment = () => {
 		setShowComment(!showComment);
 	};
+
 	return (
 		<li>
 			<div className="book">

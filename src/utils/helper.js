@@ -1,3 +1,6 @@
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+
 export const formatDate = (date) => {
 	const newDate = new Date(date);
 	return newDate.toLocaleDateString();
@@ -22,6 +25,19 @@ export const trancateTitle = (title, limit = 17) => {
 	}
 	return title;
 };
+
+export const alertBox = (msg) => {
+	return (
+		<Alert severity="error">
+			<strong>{msg}</strong>
+		</Alert>
+	);
+};
+
+<Alert severity="error">
+	<AlertTitle>Error</AlertTitle>
+	<strong>this is an error</strong>
+</Alert>;
 
 export function formatBook(book) {
 	const { id, rate, comment, date, isLibraryBook } = book;
