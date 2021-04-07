@@ -75,7 +75,10 @@ class SearchForm extends Component {
 		this.props
 			.handleAddBook({ ...book, date, comment, isLibraryBook, rate })
 			.then(() => this.props.history.push('/'))
-			.catch(() => this.resetForm());
+			.catch(() => {
+				alert('Cannot add book. Book already in your list. Try adding a different book.');
+				this.resetForm();
+			});
 	};
 
 	/* set the rate of book when user clicks on star */

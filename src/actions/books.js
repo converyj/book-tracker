@@ -7,8 +7,7 @@ Sort Books
 
 import { hideLoading, showLoading } from 'react-redux-loading';
 import { formatBook } from '../utils/helper';
-import { saveBooksLS, getBooks, updateComment, saveBook } from './../utils/api';
-import { alertBox } from './../utils/helper';
+import { getBooks, updateComment, saveBook } from './../utils/api';
 
 export const LOAD_NEW_PAGE = 'LOAD_NEW_PAGE';
 export const LOAD_EXACT_PAGE = 'LOAD_EXACT_PAGE';
@@ -74,23 +73,22 @@ export const loadExactPage = (payload) => {
 	};
 };
 
-/* add book */
+/* add book if book doesn't exist in booklist */
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
 	return (dispatch, getState) => {
 		const { books } = getState().books;
-		console.log(books.findIndex((book) => book === formattedBook));
 		const bookExists = books.findIndex(
 			(book) =>
 				book.authors.includes(formattedBook.authors[0]) &&
 				book.title === formattedBook.title
 		);
 
+		// if book exists, return a rejected Promise
 		if (bookExists >= 0) {
-			alert('Cannot add book. Book already in your list. Try adding a different book.');
-
 			return new Promise((_, rej) => rej());
 		}
+
 		dispatch(showLoading());
 		return saveBook(formattedBook)
 			.then(() => {
