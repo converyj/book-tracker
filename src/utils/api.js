@@ -31,7 +31,8 @@ export const getBooks = () => {
 export const searchBook = (query) => {
 	return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
 		.then((res) => res.json())
-		.then((data) => data.items);
+		.then((data) => data.items)
+		.catch((error) => console.log(error));
 };
 
 /* save the added book to Firebase 

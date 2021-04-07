@@ -23,15 +23,17 @@ export default function Dropdown({ query, setTitle }) {
 		() => {
 			let mounted = true;
 			const search = () =>
-				searchBook(query).then((allBooks) => {
-					const filteredArr = allBooks.filter((book) => {
-						return (
-							book.volumeInfo.hasOwnProperty('authors') &&
-							book.volumeInfo.hasOwnProperty('imageLinks')
-						);
-					});
-					if (mounted) setBooks(filteredArr);
-				});
+				searchBook(query)
+					.then((allBooks) => {
+						const filteredArr = allBooks.filter((book) => {
+							return (
+								book.volumeInfo.hasOwnProperty('authors') &&
+								book.volumeInfo.hasOwnProperty('imageLinks')
+							);
+						});
+						if (mounted) setBooks(filteredArr);
+					})
+					.catch((err) => console.log(err));
 
 			search();
 			return () => (mounted = false);
