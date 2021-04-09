@@ -3,6 +3,7 @@ import './dropdown.css';
 import { trancateTitle } from './../utils/helper';
 import { searchBook } from '../utils/api';
 import { PropTypes } from 'prop-types';
+import Spinner from './Spinner';
 
 /**
  * @description Responsible for displaying the list of books 
@@ -33,7 +34,7 @@ export default function Dropdown({ query, setTitle }) {
 						});
 						if (mounted) setBooks(filteredArr);
 					})
-					.catch((err) => console.log(err));
+					.catch(() => alert('Cannot fetch books. Please try again.'));
 
 			search();
 			return () => (mounted = false);
@@ -67,10 +68,9 @@ export default function Dropdown({ query, setTitle }) {
 
 	return (
 		<React.Fragment>
-			<ul className="search-book-list">
-				{books &&
-					books.length > 0 &&
-					Object.values(books).map((book) => (
+			{books && books.length > 0 ? (
+				<ul className="search-book-list">
+					{Object.values(books).map((book) => (
 						<li
 							key={book.id}
 							id={book.id}
@@ -92,7 +92,10 @@ export default function Dropdown({ query, setTitle }) {
 							</div>
 						</li>
 					))}
-			</ul>
+				</ul>
+			) : (
+				<Spinner />
+			)}
 		</React.Fragment>
 	);
 }

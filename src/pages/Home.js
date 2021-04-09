@@ -4,11 +4,16 @@ import { connect } from 'react-redux';
 import BookList from '../components/BookList';
 import { filterByValue, sortByAuthor, sortByDate, handleInitialData } from '../actions/books';
 import SearchBtn from '../components/SearchBtn';
+import Spinner from '../components/Spinner';
 
 class Home extends Component {
 	componentDidMount() {
-		this.props.handleInitialData().then(() => console.log('ready'));
+		this.props.handleInitialData().then(() => this.setState({ ready: true }));
 	}
+
+	state = {
+		ready: false
+	};
 
 	/* handle the filtering of books */
 	filterBooks = (e) => {
@@ -28,6 +33,7 @@ class Home extends Component {
 	};
 
 	render() {
+		console.log('Home');
 		return (
 			<div>
 				<Header
@@ -35,10 +41,8 @@ class Home extends Component {
 					handleSortedList={(e) => this.handleSortedList(e)}
 				/>
 
-				{this.props.loading.default == 1 ? (
-					<div className="books-grid">
-						<h1>Loading</h1>
-					</div>
+				{!this.state.ready ? (
+					<Spinner />
 				) : (
 					<Fragment>
 						<BookList />

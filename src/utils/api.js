@@ -23,7 +23,7 @@ export const getBooks = () => {
 		.then((value) => {
 			return value;
 		})
-		.catch((error) => console.log(error));
+		.catch((error) => alert('Having trouble getting books. Please try again later.'));
 	return books;
 };
 
@@ -32,7 +32,7 @@ export const searchBook = (query) => {
 	return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
 		.then((res) => res.json())
 		.then((data) => data.items)
-		.catch((error) => console.log(error));
+		.catch((error) => alert('Having trouble fetching books. Please try again later.'));
 };
 
 /* save the added book to Firebase 

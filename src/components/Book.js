@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -21,6 +21,8 @@ const Book = ({ book }) => {
 	const handleShowComment = () => {
 		setShowComment(!showComment);
 	};
+
+	console.log('Book');
 
 	return (
 		<li>

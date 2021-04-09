@@ -3,7 +3,7 @@
 	max-width: 500px;
 	height: 200px;
 	overflow-y: scroll;
-	box-shadow: 10px 0 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 2rem 5rem 1rem rgb(0 0 0 / 19%);
 }
 .search-book-list__item {
 	display: flex;

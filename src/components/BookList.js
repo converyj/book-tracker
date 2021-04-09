@@ -10,6 +10,7 @@ import Pagination from './Pagination';
  */
 class BookList extends Component {
 	componentDidUpdate(prevProps, _) {
+		console.log('booklist update');
 		// if page is changed and there are filters, refresh the books to apply the filter - can only be one
 		if (
 			prevProps.books.currentPage !== this.props.books.currentPage &&
