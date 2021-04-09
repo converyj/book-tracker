@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { pure } from 'recompose';
 import PropTypes from 'prop-types';
 import ExpandMore from '@material-ui/icons/ExpandMore';

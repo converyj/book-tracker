@@ -26,7 +26,7 @@ class CommentField extends Component {
 				<textarea
 					name="comment"
 					value={comment}
-					id=""
+					id={id}
 					onChange={(e) => this.setState({ comment: e.target.value })}
 					className="comment-field"
 					ref={(input) => {
@@ -45,7 +45,9 @@ class CommentField extends Component {
 }
 
 CommentField.propTypes = {
-	id: PropTypes.string.isRequired
+	comment: PropTypes.string.isRequired,
+	id: PropTypes.string.isRequired,
+	show: PropTypes.func.isRequired
 };
 
 export default connect(null, { handleBookComment })(CommentField);
