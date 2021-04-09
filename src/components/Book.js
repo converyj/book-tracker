@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { pure } from 'recompose';
 import PropTypes from 'prop-types';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -9,8 +10,9 @@ import CommentField from './CommentField';
 
 /**
  * @description Displays a book and the user's own rating 
+ * This component uses recompose's pure High-Order Component to only render the book if their state or props change eg. updating book comment  
  */
-const Book = ({ book }) => {
+const Book = pure(({ book }) => {
 	// whether to show the comment field
 	const [
 		showComment,
@@ -21,8 +23,6 @@ const Book = ({ book }) => {
 	const handleShowComment = () => {
 		setShowComment(!showComment);
 	};
-
-	console.log('Book');
 
 	return (
 		<li>
@@ -69,7 +69,7 @@ const Book = ({ book }) => {
 			</div>
 		</li>
 	);
-};
+});
 
 Book.propTypes = {
 	book: PropTypes.object.isRequired

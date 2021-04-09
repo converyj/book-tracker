@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './commentField.css';
 import { connect } from 'react-redux';
 import { handleBookComment } from '../actions/books';
 
@@ -33,7 +34,9 @@ class CommentField extends Component {
 					}}>
 					{comment}
 				</textarea>
-				<button className="btn btn--sm" onClick={() => handleBookComment(id, comment)}>
+				<button
+					className="btn btn--sm"
+					onClick={() => handleBookComment(id, comment).then(() => this.props.show())}>
 					Update
 				</button>
 			</div>

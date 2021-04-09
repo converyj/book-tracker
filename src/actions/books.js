@@ -120,7 +120,7 @@ export function handleInitialData() {
 export const handleBookComment = (id, comment) => {
 	return (dispatch) => {
 		dispatch(showLoading());
-		updateComment(id, comment)
+		return updateComment(id, comment)
 			.then(() => {
 				dispatch(updateBookComment(id, comment));
 			})

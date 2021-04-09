@@ -33,7 +33,6 @@ class Home extends Component {
 	};
 
 	render() {
-		console.log('Home');
 		return (
 			<div>
 				<Header
@@ -54,16 +53,9 @@ class Home extends Component {
 	}
 }
 
-export default connect(
-	({ loadingBar }) => {
-		return {
-			loading: loadingBar
-		};
-	},
-	{
-		handleInitialData,
-		filterByValue,
-		sortByAuthor,
-		sortByDate
-	}
-)(Home);
+export default connect(null, {
+	handleInitialData,
+	filterByValue,
+	sortByAuthor,
+	sortByDate
+})(Home);
