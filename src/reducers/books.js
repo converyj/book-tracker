@@ -115,6 +115,7 @@ export default function books(state = {}, action) {
 			let exactBooks = exactPageState.books.slice(lowerCountExact, upperCountExact);
 			// update filtered books
 			exactPageState.filteredBooks = exactBooks;
+			exactPageState.filteredCount = exactPageState.filteredBooks.length;
 			// update the current books shown and current page
 			exactPageState.currentCount = upperCountExact;
 			exactPageState.currentPage = exactPage;
