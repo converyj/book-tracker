@@ -24,6 +24,7 @@ class BookList extends Component {
 				case 'SORT_BY_AUTHOR':
 					this.props.sortByAuthor();
 					break;
+
 				default:
 					break;
 			}

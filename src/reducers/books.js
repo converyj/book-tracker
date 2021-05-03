@@ -72,6 +72,7 @@ export default function books(state = {}, action) {
 
 				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
 				// use 'books' array rather than 'filteredBooks' because using 'filterBooks' would result in an empty array since we only have 20 books there when the page first loads
+
 				nextBooks = loadNewPageState.books.slice(lowerCount, upperCount);
 			}
 			// previous page
@@ -96,8 +97,9 @@ export default function books(state = {}, action) {
 				);
 			}
 
-			// update filterdBooks
+			// update filterdBooks and filteredCount
 			loadNewPageState.filteredBooks = nextBooks;
+			loadNewPageState.filteredCount = loadNewPageState.filteredBooks.length;
 			return loadNewPageState;
 
 		case LOAD_EXACT_PAGE:
