@@ -112,14 +112,14 @@ export const exportBooks = (books) => {
 			right: { style: 'thin' }
 		};
 
-		// // fill even rows
-		// if (rowIndex % 2 === 0) {
-		// 	worksheet.getRow(rowIndex).fill = {
-		// 		type: 'pattern',
-		// 		pattern: 'solid',
-		// 		fgColor: { argb: 'E0E0E0E0' }
-		// 	};
-		// }
+		// fill even rows
+		if (rowIndex % 2 === 0) {
+			worksheet.getRow(rowIndex).fill = {
+				type: 'pattern',
+				pattern: 'solid',
+				fgColor: { argb: 'E0E0E0E0' }
+			};
+		}
 	}
 
 	// add filters to columns
