@@ -8,7 +8,11 @@ import {
 	ADD_BOOK,
 	UPDATE_COMMENT
 } from '../actions/books';
-import { addFilterIfNotExist, removeFilterIfExist } from '../utils/helper';
+import {
+	addFilterIfNotExist,
+	removeFilterIfExist,
+	checkNextBooksBasedOnFilters
+} from '../utils/helper';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 
 export default function books(state = {}, action) {
@@ -21,7 +25,7 @@ export default function books(state = {}, action) {
 			let totalBooks = Object.values(action.books).length;
 			let countPerPage = action.countPerPage || 20;
 
-			// Need the total number of pages. This is used in rendering the pagination component: round up pages
+			// total number of pages. This is used in rendering the pagination component: round up pages
 			let totalPages = Math.ceil(totalBooks / countPerPage);
 			// only load 20 books to start with
 			// set books as array, not as an object
@@ -32,16 +36,19 @@ export default function books(state = {}, action) {
 				...state,
 				// all books unfiltered
 				books: allBooks,
+				// books per page from count per page and filters applied
 				filteredBooks: filteredBooks,
 				// currentCount is the 'upper count': current number of books seen so far. This changes throughout the app
 				currentCount: countPerPage,
 				countPerPage,
+				// total number of books unfiltered
 				totalCount: totalBooks,
 				currentPage: 1,
 				// the total number of pages without any filters applied
 				totalPages,
 				// the total number of pages after a filter has been applied
 				filteredPages: totalPages,
+				// active filters
 				appliedFilters: []
 			};
 
@@ -56,6 +63,7 @@ export default function books(state = {}, action) {
 			let perPage = loadNewPageState.countPerPage; // 20 by default
 
 			let nextBooks;
+			let slicedBooks;
 			// next page
 			if (addPages === 1) {
 				/*
@@ -71,9 +79,10 @@ export default function books(state = {}, action) {
 				loadNewPageState.currentCount += loadNewPageState.countPerPage;
 
 				// 3. retrieve next books eg. within the range of 20-40 (for page 2)
-				// use 'books' array rather than 'filteredBooks' because using 'filterBooks' would result in an empty array since we only have 20 books there when the page first loads
-
-				nextBooks = loadNewPageState.books.slice(lowerCount, upperCount);
+				// the number of books depends on if there are filters applied --> FILTER_BY_VALUE filter reduces the number of books
+				// if no filter --> use 'books' array rather than 'filteredBooks' because using 'filterBooks' would result in an empty array since we only have 20 books there when the page first loads
+				slicedBooks = checkNextBooksBasedOnFilters(loadNewPageState);
+				nextBooks = slicedBooks.slice(lowerCount, upperCount);
 			}
 			// previous page
 			if (addPages === -1) {
@@ -91,10 +100,10 @@ export default function books(state = {}, action) {
 				loadNewPageState.currentCount = lowerCount;
 
 				// 3. retrieve next books eg. within the range of 0-20 (for page 2)
-				nextBooks = loadNewPageState.books.slice(
-					lowerCount - perPage,
-					upperCount - perPage
-				);
+				// the number of books depends on if there are filters applied --> FILTER_BY_VALUE filter reduces the number of books
+				// if no filter --> use 'books' array rather than 'filteredBooks' because using 'filterBooks' would result in an empty array since we only have 20 books there when the page first loads
+				slicedBooks = checkNextBooksBasedOnFilters(loadNewPageState);
+				nextBooks = slicedBooks.slice(lowerCount - perPage, upperCount - perPage);
 			}
 
 			// update filterdBooks and filteredCount
@@ -112,7 +121,9 @@ export default function books(state = {}, action) {
 			let lowerCountExact = upperCountExact - exactPageState.countPerPage;
 
 			// 2. retrieve next books eg. within the 40-60 range (page 3)
-			let exactBooks = exactPageState.books.slice(lowerCountExact, upperCountExact);
+			// // the number of books depends on if there are filters applied --> FILTER_BY_VALUE filter reduces the number of books
+			const slicedExactBooks = checkNextBooksBasedOnFilters(exactPageState);
+			let exactBooks = slicedExactBooks.slice(lowerCountExact, upperCountExact);
 			// update filtered books
 			exactPageState.filteredBooks = exactBooks;
 			exactPageState.filteredCount = exactPageState.filteredBooks.length;
@@ -148,11 +159,24 @@ export default function books(state = {}, action) {
 					newState.appliedFilters
 				);
 
-				newState.filteredBooks = filteredValues;
+				// new property of total number of books that match filter; need this so BookList Component would not show all the books at once; will be the same as filterBooks if the number of books are less than the count of books per page
+				newState.matchedBooks = filteredValues;
 
-				// update number of pages with filtered books
+				// if books that match the filter value is more than the count of books per page, then only show the count of books per page; else show all of the books
+				if (filteredValues.length > newState.countPerPage) {
+					newState.filteredBooks = filteredValues.slice(0, newState.countPerPage);
+				}
+				else {
+					newState.filteredBooks = filteredValues;
+				}
+
+				// update number of books with total number of matched books
 				newState.filteredCount = newState.filteredBooks.length;
-				newState.filteredPages = Math.ceil(newState.filteredCount / newState.countPerPage);
+
+				// update number of filtered pages
+				newState.filteredPages = Math.ceil(
+					newState.matchedBooks.length / newState.countPerPage
+				);
 			}
 			else {
 				//if the value is empty, we can assume everything has been erased

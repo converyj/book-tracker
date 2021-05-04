@@ -67,3 +67,8 @@ export const removeFilterIfExist = (filter, appliedFilters) => {
 
 	return copyAppliedFilters;
 };
+
+// check if there are any filters applied (FILTER_BY_VALUE) which will change the number of books shown (different from the total number of books)
+export const checkNextBooksBasedOnFilters = (state, filter = 'FILTER_BY_VALUE') => {
+	return state.appliedFilters.includes(filter) ? state.matchedBooks : state.books;
+};
