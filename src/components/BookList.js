@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Book from './../components/Book';
 import './bookList.css';
 import Pagination from './Pagination';
+import { exportBooks } from '../utils/helper';
 
 /**
  * @description Display list of books user has read 
@@ -51,9 +52,15 @@ class BookList extends Component {
 	}
 
 	render() {
-		const { filteredBooks, filteredPages } = this.props.books;
+		const { books, filteredBooks, filteredPages } = this.props.books;
 		return (
 			<Fragment>
+				<button
+					style={{ margin: '0px' }}
+					class="btn btn"
+					onClick={() => exportBooks(books)}>
+					Export Books
+				</button>
 				{filteredPages > 0 && <Pagination />}
 				<div className="books-grid">
 					{filteredBooks && filteredBooks !== null && filteredBooks.length > 0 ? (
