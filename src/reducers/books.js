@@ -99,7 +99,7 @@ export default function books(state = {}, action) {
 				*/
 				loadNewPageState.currentCount = lowerCount;
 
-				// 3. retrieve next books eg. within the range of 0-20 (for page 2)
+				// 3. retrieve next books eg. within the range of 0-20 (starting at page 2)
 				// the number of books depends on if there are filters applied --> FILTER_BY_VALUE filter reduces the number of books
 				// if no filter --> use 'books' array rather than 'filteredBooks' because using 'filterBooks' would result in an empty array since we only have 20 books there when the page first loads
 				slicedBooks = checkNextBooksBasedOnFilters(loadNewPageState);
@@ -150,7 +150,7 @@ export default function books(state = {}, action) {
 			let newState = cloneDeep(state);
 			//if the value from the input box is not empty
 			if (value) {
-				const filteredValues = state.books.filter((book) => {
+				const filteredValues = newState.books.filter((book) => {
 					return book.title.toLowerCase().includes(value.toLowerCase());
 				});
 				// add the sortByValue filter if doesn't exist
