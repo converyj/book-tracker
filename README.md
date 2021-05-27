@@ -1,7 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
 # Book Tracker
-This is a React Web Application to manage and keep track of the books you have read.
+This is a React Web Application to manage and keep track of the books users have read. Users also have the option to export their books to an Excel Spreadsheet. 
 
 The books are stored and updated using [Firebase Realtime Database](https://firebase.google.com/docs/database). 
 
