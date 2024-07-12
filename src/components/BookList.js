@@ -1,15 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import { sortByDate, sortByAuthor, filterByValue } from './../actions/books';
+import { sortByDate, sortByAuthor, filterByValue, recieveBooks } from './../actions/books';
 import { connect } from 'react-redux';
 import Book from './../components/Book';
 import './bookList.css';
 import Pagination from './Pagination';
-import { exportBooks } from '../utils/helper';
-
+import { exportBooks, formatImportBook } from '../utils/helper';
+import * as XLSX from 'xlsx';
+import { getBookByVolume } from '../utils/api';
 /**
  * @description Display list of books user has read 
  */
-class BookList extends Component {
+export class BookList extends Component {
+    state = {
+        data: []
+    }
+
     componentDidUpdate(prevProps, _) {
         // if filter by value was applied but is now not applied and there are still filters, refresh the book list to apply the filter
         if (
@@ -32,6 +37,53 @@ class BookList extends Component {
         }
     }
 
+    handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const workbook = XLSX.read(event.target.result, { type: 'binary' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const sheetData = XLSX.utils.sheet_to_json(sheet);
+
+            console.log(sheetData);
+
+
+            const getFormattedBooks = () => {
+                return new Promise((res, rej) => {
+                    let books = [];
+                    const promises = sheetData.map(book => {
+                        console.log(book.Id);
+                        return getBookByVolume(book.Id, book.Title).then(res => {
+                            console.log(res);
+                            const googleBook = res
+                            console.log(googleBook);
+                            const { smallThumbnail: image } = googleBook.volumeInfo.imageLinks;
+                            const { previewLink: link } = googleBook.volumeInfo;
+                            const formattedBook = formatImportBook({
+                                ...book,
+                                link,
+                                image,
+                                id: googleBook.id
+                            })
+                            console.log(formattedBook);
+                            books.push(formattedBook)
+                            console.log(books);
+                        })
+                    })
+                    Promise.all(promises)
+                        .then(() => res(books))
+                        .catch(err => rej(err));
+                })
+            }
+
+            getFormattedBooks().then(books => this.props.recieveBooks(books))
+        };
+
+        reader.readAsBinaryString(file);
+    };
+
     render() {
         const { books, filteredBooks, filteredPages } = this.props.books;
         return (
@@ -42,6 +94,7 @@ class BookList extends Component {
                     onClick={() => exportBooks(books)}>
                     Export Books
                 </button>
+                <input type="file" onChange={this.handleFileUpload} />
                 {filteredPages > 0 && <Pagination />}
                 <div className="books-grid">
                     {filteredBooks && filteredBooks !== null && filteredBooks.length > 0 ? (
@@ -65,5 +118,5 @@ export default connect(
             loading: loadingBar
         };
     },
-    { sortByAuthor, sortByDate, filterByValue }
+    { sortByAuthor, sortByDate, filterByValue, recieveBooks }
 )(BookList);

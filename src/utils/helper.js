@@ -6,6 +6,30 @@ export const formatDate = (date) => {
     return newDate.toLocaleDateString();
 };
 
+const formatDateToTimezone = (date, offsetHours = -5) => {
+    // Parse the UTC date string into a Date object
+    const utcDate = new Date(date)
+
+    // Calculate the offset in milliseconds
+    const offsetMilliseconds = offsetHours * 60 * 60 * 1000;
+
+    // Calculate the local time by adjusting the UTC date with the offset
+    const localDate = new Date(utcDate.getTime() + offsetMilliseconds);
+
+    // Format the date to the desired format with timezone offset
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const hours = String(localDate.getHours()).padStart(2, '0');
+    const minutes = String(localDate.getMinutes()).padStart(2, '0');
+    const seconds = String(localDate.getSeconds()).padStart(2, '0');
+    const offsetSign = offsetHours >= 0 ? '+' : '-';
+    const offsetHoursAbs = String(Math.abs(offsetHours)).padStart(2, '0');
+    const offsetString = `${offsetSign}${offsetHoursAbs}:00`;
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${offsetString}`;
+}
+
 export const trancateTitle = (title, limit = 17) => {
     const newTitle = [];
     if (title.length > limit) {
@@ -43,12 +67,28 @@ export function formatBook(book) {
     };
 }
 
-export function formatExportBook(book) {
-    const { title, authors, date, isLibraryBook, rate, comment } = book;
+export function formatImportBook(book) {
+    const { Title, Authors, Date, LibraryBook, Rate, Comment, Id, image, link } = book;
     return {
+        id: Id,
+        title: Title,
+        authors: [Authors],
+        image,
+        link,
+        date: formatDate(Date),
+        isLibaryBook: Boolean(LibraryBook),
+        rate: parseInt(Rate.split('/')[0]),
+        comment: Comment
+    };
+}
+
+export function formatExportBook(book) {
+    const { id, title, authors, date, isLibraryBook, rate, comment } = book;
+    return {
+        id,
         title,
         authors: authors.join(','),
-        date: formatDate(date),
+        date: date,
         libaryBook: isLibraryBook ? 'Yes' : 'No',
         rate: `${rate}/5`,
         comment
@@ -114,6 +154,30 @@ export const exportBooks = (books) => {
         worksheet.getRow(rowIndex).border = {
             right: { style: 'thin' }
         };
+        worksheet.columns.forEach(function (column, i) {
+            var maxLength = 0;
+            column["eachCell"]({ includeEmpty: true }, function (cell) {
+                // set all columns to text format 
+                worksheet.getColumn(i + 1).numFmt = '@'
+                var columnLength = cell.value ? cell.value.toString().length : 20
+                if (columnLength > maxLength) {
+                    maxLength = columnLength;
+                }
+            });
+            // column min width of 20
+            column.width = maxLength < 20 ? 20 : maxLength;
+        });
+        // Loop through each row in the specified column
+        worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            if (rowNumber > 1) { // Skip the first row
+                // Update the cell in column A with the current date
+                const cell = row.getCell('D');
+                cell.value = new Date();
+            }
+        });
+
+        // custom date column
+        worksheet.getColumn(4).numFmt = 'dd/mm/yyyy';
 
         // fill even rows
         if (rowIndex % 2 === 0) {
@@ -185,3 +249,11 @@ const saveFile = async (workbook) => {
         );
     });
 };
+
+export const importBooks = async (filename) => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.getWorksheet();
+    console.log(filename);
+    const file = await workbook.xlsx.readFile(filename);
+    console.log(file);
+}

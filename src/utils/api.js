@@ -36,6 +36,14 @@ export const searchBook = (query) => {
         .catch((error) => alert('Having trouble fetching books. Please try again later.'));
 };
 
+/* get book by volume using the Google Books API */
+export const getBookByVolume = (volume, query) => {
+    return fetch(`https://www.googleapis.com/books/v1/volumes/${volume}?q=${query}`)
+        .then((res) => res.json())
+        .then((data) => data)
+        .catch((error) => alert('Having trouble fetching books. Please try again later.'));
+};
+
 /* save the added book to Firebase 
 https://firebase.google.com/docs/database/web/read-and-write#basic_write
 */
