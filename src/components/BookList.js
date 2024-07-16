@@ -47,29 +47,21 @@ export class BookList extends Component {
             const sheet = workbook.Sheets[sheetName];
             const sheetData = XLSX.utils.sheet_to_json(sheet);
 
-            console.log(sheetData);
-
-
             const getFormattedBooks = () => {
                 return new Promise((res, rej) => {
                     let books = [];
                     const promises = sheetData.map(book => {
                         console.log(book.Id);
                         return getBookByVolume(book.Id, book.Title).then(res => {
-                            console.log(res);
                             const googleBook = res
-                            console.log(googleBook);
                             const { smallThumbnail: image } = googleBook.volumeInfo.imageLinks;
                             const { previewLink: link } = googleBook.volumeInfo;
                             const formattedBook = formatImportBook({
                                 ...book,
                                 link,
                                 image,
-                                id: googleBook.id
                             })
-                            console.log(formattedBook);
                             books.push(formattedBook)
-                            console.log(books);
                         })
                     })
                     Promise.all(promises)
@@ -88,13 +80,18 @@ export class BookList extends Component {
         const { books, filteredBooks, filteredPages } = this.props.books;
         return (
             <Fragment>
-                <button
-                    style={{ margin: '0px' }}
-                    className="btn btn"
-                    onClick={() => exportBooks(books)}>
-                    Export Books
-                </button>
-                <input type="file" onChange={this.handleFileUpload} />
+                <div className="flex">
+                    <button
+                        style={{ margin: '0px' }}
+                        className="btn btn"
+                        onClick={() => exportBooks(books)}>
+                        Export Books
+                    </button>
+                    <div id='import-books'>
+                        <p className='label'>Import Books</p>
+                        <input type="file" onChange={this.handleFileUpload} />
+                    </div>
+                </div>
                 {filteredPages > 0 && <Pagination />}
                 <div className="books-grid">
                     {filteredBooks && filteredBooks !== null && filteredBooks.length > 0 ? (
