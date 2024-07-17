@@ -89,7 +89,7 @@ export class BookList extends Component {
                     </button>
                     <div id='import-books'>
                         <p className='label'>Import Books</p>
-                        <input type="file" onChange={this.handleFileUpload} />
+                        <input type="file" accept=".xlsx" onChange={this.handleFileUpload} />
                     </div>
                 </div>
                 {filteredPages > 0 && <Pagination />}
