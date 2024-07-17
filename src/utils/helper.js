@@ -52,7 +52,7 @@ export function formatImportBook(book) {
         image,
         link,
         date: date,
-        isLibaryBook: Boolean(LibraryBook),
+        isLibraryBook: LibraryBook == 'Yes' ? true : false,
         rate: parseInt(Rate.split('/')[0]),
         comment: Comment
     };
@@ -67,7 +67,7 @@ export function formatExportBook(book) {
         authors: authors.join(','),
         date: date,
         realDate: date,
-        libaryBook: isLibraryBook ? 'Yes' : 'No',
+        libraryBook: isLibraryBook ? 'Yes' : 'No',
         rate: `${rate}/5`,
         comment
     };
