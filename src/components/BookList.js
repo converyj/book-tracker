@@ -6,7 +6,7 @@ import './bookList.css';
 import Pagination from './Pagination';
 import { exportBooks, formatImportBook } from '../utils/helper';
 import * as XLSX from 'xlsx';
-import { getBookByVolume } from '../utils/api';
+import { getBookByVolume, saveBook } from '../utils/api';
 /**
  * @description Display list of books user has read 
  */
@@ -70,7 +70,10 @@ export class BookList extends Component {
                 })
             }
 
-            getFormattedBooks().then(books => this.props.recieveBooks(books))
+            getFormattedBooks().then(books => {
+                this.props.recieveBooks(books)
+                books?.map(book => saveBook(book))
+            })
         };
 
         reader.readAsBinaryString(file);
