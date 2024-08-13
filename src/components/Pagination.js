@@ -28,8 +28,8 @@ class Pagination extends Component {
         const { filteredPages, currentPage, totalPages } = this.props;
         return (
             <section className="pagination">
-                <nav className="pagination-nav">
-                    <div className="pagination-nav-buttons">
+                <nav className="pagination-nav flex flex-col">
+                    <div className="pagination-nav-buttons flex">
                         <button
                             className="btn pagination-previous"
                             onClick={this.previousPage}
@@ -45,7 +45,7 @@ class Pagination extends Component {
                             Next Page
                         </button>
                     </div>
-                    <ul className="pagination-list">
+                    <ul className="pagination-list flex">
                         {/* creates a new array with a length defined by filteredPages */}
                         {[
                             ...Array(filteredPages)

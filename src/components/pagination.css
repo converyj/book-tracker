@@ -1,16 +1,29 @@
 .pagination {
-	padding: 1em 0;
+    padding: 1em 0;
+}
+
+.pagination-list {
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.pagination-list button {
+    flex-basis: 60px;
+}
+
+.pagination-nav * {
+    margin: 0px;
 }
 .pagination-nav {
-	display: flex;
-	justify-content: space-between;
+    gap: 16px;
 }
 
 .pagination-nav-buttons {
-	order: 3;
+    align-self: flex-end;
 }
 
 .is-current {
-	background: green;
-	font-weight: bold;
+    background: green;
+    font-weight: bold;
 }
