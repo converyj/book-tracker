@@ -261,7 +261,7 @@ export default function books(state = {}, action) {
 
             // 1. get the number of books seen so far eg 20 * 2 = 40 books
             let sortedAuthorUpperCount = newSortByAuthorState.countPerPage * newSortByAuthorState.currentPage;
-            // get the previous number of books shown
+            // get the previous number of books shown eg. 20
             let sortedAuthorLowerCount = sortedAuthorUpperCount - newSortByAuthorState.countPerPage;
 
             newSortByAuthorState.filteredBooks = sortedByAuthorBooks.slice(sortedAuthorLowerCount, sortedAuthorUpperCount);
@@ -271,14 +271,22 @@ export default function books(state = {}, action) {
         case UPDATE_COMMENT:
             let newUpdatedBooks = cloneDeep(state);
 
-            const updatedElements = state.books.map((book) => {
+            const updatedBooks = state.books.map((book) => {
                 if (book.id == action.id) {
                     return { ...book, comment: action.comment };
                 }
                 return book;
             });
-            newUpdatedBooks.books = updatedElements;
-            newUpdatedBooks.filteredBooks = updatedElements;
+            newUpdatedBooks.books = updatedBooks;
+
+            // set the filtered books again with the sorted books
+
+            // 1. get the number of books seen so far eg 20 * 2 = 40 books
+            let upperCount = newUpdatedBooks.countPerPage * newUpdatedBooks.currentPage;
+            // get the previous number of books shown eg. 20
+            let lowerCount = upperCount - newUpdatedBooks.countPerPage;
+
+            newUpdatedBooks.filteredBooks = updatedBooks.slice(lowerCount, upperCount);
 
             return newUpdatedBooks;
 

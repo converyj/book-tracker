@@ -60,7 +60,6 @@ export function formatImportBook(book) {
 
 export function formatExportBook(book) {
     const { id, title, authors, date, isLibraryBook, rate, comment } = book;
-    console.log(date);
     return {
         id,
         title,
