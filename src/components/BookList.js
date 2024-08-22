@@ -85,7 +85,6 @@ export class BookList extends Component {
 
         for (const book of data) {
             try {
-                console.log(book.Id);
                 const googleBook = await getBookByVolume(book.Id, book.Title);
                 const { smallThumbnail: image } = googleBook.volumeInfo.imageLinks;
                 const { previewLink: link } = googleBook.volumeInfo;
@@ -171,7 +170,7 @@ export class BookList extends Component {
                     <div className="books-grid">
                         <div className="flex flex-col items-center">
                             <h1>Importing Books</h1>
-                            <p>This may take a while</p>
+                            <p>This may take several minutes...</p>
                         </div>
                     </div>
                 ) : (

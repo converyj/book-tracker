@@ -10,97 +10,96 @@ import Spinner from './Spinner';
  */
 
 export default function Dropdown({ query, setTitle }) {
-	const [
-		books,
-		setBooks
-	] = useState({});
-	const [
-		selected,
-		setSelected
-	] = useState({});
+    const [
+        books,
+        setBooks
+    ] = useState({});
+    const [
+        selected,
+        setSelected
+    ] = useState({});
 
-	/* updates the list of books whenever query changes only if component is mounted (dropdown is showing only if query is not empty)*/
-	useEffect(
-		() => {
-			let mounted = true;
-			const search = () =>
-				searchBook(query)
-					.then((allBooks) => {
-						const filteredArr = allBooks.filter((book) => {
-							return (
-								book.volumeInfo.hasOwnProperty('authors') &&
-								book.volumeInfo.hasOwnProperty('imageLinks')
-							);
-						});
-						if (mounted) setBooks(filteredArr);
-					})
-					.catch(() => alert('Cannot fetch books. Please try again.'));
+    /* updates the list of books whenever query changes only if component is mounted (dropdown is showing only if query is not empty)*/
+    useEffect(
+        () => {
+            let mounted = true;
+            const search = () =>
+                searchBook(query)
+                    .then((allBooks) => {
+                        const filteredArr = allBooks.filter((book) => {
+                            return (
+                                book.volumeInfo.hasOwnProperty('authors') &&
+                                book.volumeInfo.hasOwnProperty('imageLinks')
+                            );
+                        });
+                        if (mounted) setBooks(filteredArr);
+                    })
+                    .catch(() => alert('Cannot fetch books. Please try again.'));
+            search();
+            return () => (mounted = false);
+        },
+        [
+            query
+        ]
+    );
 
-			search();
-			return () => (mounted = false);
-		},
-		[
-			query
-		]
-	);
+    /* Callback function to set the selected book that was clicked on from the list of books */
+    const handleBook = useCallback(
+        (id, books) => {
+            setSelected(Object.values(books).filter((book) => book.id === id));
+        },
+        [
+            selected
+        ]
+    );
 
-	/* Callback function to set the selected book that was clicked on from the list of books */
-	const handleBook = useCallback(
-		(id, books) => {
-			setSelected(Object.values(books).filter((book) => book.id === id));
-		},
-		[
-			selected
-		]
-	);
+    /* set the book title state when the selected book is updated */
+    useEffect(
+        () => {
+            if (selected && selected.length > 0) {
+                setTitle(selected[0]);
+            }
+        },
+        [
+            selected
+        ]
+    );
 
-	/* set the book title state when the selected book is updated */
-	useEffect(
-		() => {
-			if (selected && selected.length > 0) {
-				setTitle(selected[0]);
-			}
-		},
-		[
-			selected
-		]
-	);
-
-	return (
-		<React.Fragment>
-			{books && books.length > 0 ? (
-				<ul className="search-book-list">
-					{Object.values(books).map((book) => (
-						<li
-							key={book.id}
-							id={book.id}
-							onClick={(e) =>
-								handleBook(e.target.closest('.search-book-list__item').id, books)}
-							className="search-book-list__item">
-							<img
-								src={
-									book.volumeInfo.imageLinks &&
-									book.volumeInfo.imageLinks.smallThumbnail
-								}
-								alt=""
-							/>
-							<div>
-								<p className="search-book-list__item-title">
-									{trancateTitle(book.volumeInfo.title)}
-								</p>
-								<p>{book.volumeInfo.authors.join(', ')}</p>
-							</div>
-						</li>
-					))}
-				</ul>
-			) : (
-				<Spinner />
-			)}
-		</React.Fragment>
-	);
+    return (
+        <React.Fragment>
+            {books && books.length > 0 ? (
+                <ul className="search-book-list">
+                    {Object.values(books).map((book) => (
+                        <li
+                            key={book.id}
+                            id={book.id}
+                            onClick={(e) =>
+                                handleBook(e.target.closest('.search-book-list__item').id, books)}
+                            className="search-book-list__item">
+                            <img
+                                src={
+                                    book.volumeInfo.imageLinks &&
+                                    book.volumeInfo.imageLinks.smallThumbnail
+                                }
+                                alt=""
+                            />
+                            <div>
+                                <p className="search-book-list__item-title">
+                                    {trancateTitle(book.volumeInfo.title)}
+                                </p>
+                                <p>{book.volumeInfo.authors.join(', ')}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <Spinner />
+            )}
+        </React.Fragment>
+    );
 }
 
 Dropdown.propTypes = {
-	query: PropTypes.string.isRequired,
-	setTitle: PropTypes.func
+    query: PropTypes.string.isRequired,
+    setTitle: PropTypes.func
 };
