@@ -229,11 +229,3 @@ const saveFile = async (workbook) => {
         );
     });
 };
-
-export const importBooks = async (filename) => {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.getWorksheet();
-    console.log(filename);
-    const file = await workbook.xlsx.readFile(filename);
-    console.log(file);
-}
