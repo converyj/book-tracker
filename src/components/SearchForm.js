@@ -107,7 +107,7 @@ class SearchForm extends Component {
                             />
                         </div>
                             <small className="note">Press Enter to search for a book</small>
-                        {/* show dropdown if title value is not empty and user has not chosen a book */}
+                        {/* show dropdown if title value is not empty and showDropdown is true */}
                         {showDropdown &&
                             title.length > 0 && <Dropdown query={title} setTitle={this.handleTitle} />}
                     </div>
