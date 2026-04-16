@@ -19,7 +19,7 @@ export default function Dropdown({ query, setTitle }) {
         setSelected
     ] = useState({});
 
-    /* updates the list of books whenever query changes only if component is mounted (dropdown is showing only if query is not empty)*/
+    /* updates the list of books when component is mounted */
     useEffect(
         () => {
             let mounted = true;
@@ -38,9 +38,7 @@ export default function Dropdown({ query, setTitle }) {
             search();
             return () => (mounted = false);
         },
-        [
-            query
-        ]
+        []
     );
 
     /* Callback function to set the selected book that was clicked on from the list of books */

@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react';
+import React, { Component } from 'react';
 import Dropdown from './Dropdown';
 import './searchForm.css';
 import { handleAddBook } from './../actions/books';
@@ -33,16 +33,12 @@ class SearchForm extends Component {
         });
     };
 
-    /* real check is to show the dropdown to display list of books when title changes and still showing the dropdown (keeps it from not updated at every render)
-    - need it to make the Dropdown Component render when title changes 
-       - this.state.showDropdown will always be true after first time showing the dropdown which is responsibe for displaying the dropdown 
-       - prevState.showDropdown will only be false at first update which will cause componentDidUpdate not to run */
+    /* close the dropdown when showDropdown is open and title is changed */
     componentDidUpdate(_, prevState) {
         if (
-            this.state.title !== prevState.title &&
-            this.state.showDropdown === prevState.showDropdown
+            this.state.title !== prevState.title && this.state.showDropdown
         ) {
-            this.setState({ showDropdown: true });
+            this.setState({ showDropdown: false });
         }
     }
 
@@ -84,6 +80,11 @@ class SearchForm extends Component {
         this.setState({ [name]: value });
     };
 
+    handleBookTitleSubmit = (e) => {
+        e.preventDefault();
+        this.setState({ showDropdown: true });
+    };
+
     render() {
         const history = this.props.history
         const { title, comment, isLibraryBook, rate, showDropdown } = this.state;
@@ -92,7 +93,8 @@ class SearchForm extends Component {
                 <button className="btn" onClick={() => history.goBack()}>
                     Go Back
                 </button>
-                <form action="">
+                <div className="form">
+                <form onSubmit={this.handleBookTitleSubmit}>
                     <div className="form-title">
                         <div className="form-group">
                             <label htmlFor="book-title">Book Title:</label>
@@ -104,11 +106,12 @@ class SearchForm extends Component {
                                 onChange={this.handleInputChange}
                             />
                         </div>
+                            <small className="note">Press Enter to search for a book</small>
                         {/* show dropdown if title value is not empty and user has not chosen a book */}
                         {showDropdown &&
                             title.length > 0 && <Dropdown query={title} setTitle={this.handleTitle} />}
                     </div>
-
+                </form>
                     <DatePicker handleDate={this.setDate} />
                     <div className="form-group">
                         <label htmlFor="isLibraryBook">Library Book</label>
@@ -132,7 +135,7 @@ class SearchForm extends Component {
                     <div className="form-group">
                         <AddRating setRate={this.setRate} rate={rate} />
                     </div>
-                </form>
+                    </div>
                 <a className="btn btn--form" type="button" onClick={this.handleAdd}>
                     ADD
                 </a>
