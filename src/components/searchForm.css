@@ -2,7 +2,7 @@
 	margin: 1em 0;
 }
 
-.search-grid form {
+.search-grid .form {
 	display: flex;
 	gap: 3em;
 	flex-direction: column;
@@ -10,7 +10,7 @@
 	align-items: baseline;
 }
 @media (min-width: 800px) {
-	.search-grid form {
+	.search-grid .form {
 		flex-wrap: wrap;
 		flex-direction: row;
 	}
@@ -28,6 +28,18 @@ label {
 
 .form-title {
 	flex-direction: column;
+    width: 300px;
+}
+
+.note {
+	font-size: 0.8em;
+	color: #666;
+    font-style: italic;
+    margin-left: 7em;
+}
+
+.form-title .form-group {
+	width: 100%;
 }
 
 .btn--form {
