@@ -7,6 +7,14 @@ if (!userID) userID = localStorage.userID = Math.random().toString(36).substr(-8
 
 const booksRef = ref(db, `users/${userID}/books/`); // Create a reference to the path
 
+const GOOGLE_BOOKS_API_KEY = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
+
+const withBooksApiKey = (url) => {
+    if (!GOOGLE_BOOKS_API_KEY) return url;
+    const join = url.includes('?') ? '&' : '?';
+    return `${url}${join}key=${encodeURIComponent(GOOGLE_BOOKS_API_KEY)}`;
+};
+
 // Function to get data from a reference
 const getData = async (ref) => {
     try {
@@ -36,15 +44,15 @@ export const getBooks = () => {
 
 /* search books using the Google Books API */
 export const searchBook = (query) => {
-    return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+    return fetch(withBooksApiKey(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`))
         .then((res) => res.json())
-        .then((data) => data.items)
+        .then((data) => data.items ?? [])
         .catch((error) => alert('Having trouble fetching books. Please try again later.'));
 };
 
 /* get book by volume using the Google Books API */
 export const getBookByVolume = (volume, query) => {
-    return fetch(`https://www.googleapis.com/books/v1/volumes/${volume}?q=${query}`)
+    return fetch(withBooksApiKey(`https://www.googleapis.com/books/v1/volumes/${encodeURIComponent(volume)}?q=${encodeURIComponent(query)}`))
         .then((res) => res.json())
         .then((data) => data)
         .catch((error) => alert('Having trouble getting books. Please try again later.'));
