@@ -28,8 +28,9 @@ export const trancateTitle = (title, limit = 17) => {
 
 export function formatBook(book) {
     const { id, rate, comment, date, isLibraryBook } = book;
-    const { infoLink: link, title, authors } = book.volumeInfo;
-    const { smallThumbnail: image } = book.volumeInfo.imageLinks;
+    const vi = book.volumeInfo || {};
+    const { infoLink: link, title, authors = [] } = vi;
+    const image = vi.imageLinks?.smallThumbnail;
     return {
         id,
         title,

@@ -77,10 +77,10 @@ export const loadExactPage = (payload) => {
 export function handleAddBook(book) {
 	const formattedBook = formatBook(book);
 	return (dispatch, getState) => {
-		const { books } = getState().books;
+		const books = getState().books?.books ?? [];
 		const bookExists = books.findIndex(
 			(book) =>
-				book.authors.includes(formattedBook.authors[0]) &&
+				(book.authors ?? []).includes(formattedBook.authors?.[0]) &&
 				book.title === formattedBook.title
 		);
 
